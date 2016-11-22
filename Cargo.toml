@@ -1,0 +1,6 @@
+[package]
+name = "txtrpg-rs"
+version = "0.1.0"
+authors = ["Julian Laubstein <julian.laubstein@9elements.com>"]
+
+[dependencies]
