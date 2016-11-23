@@ -3,7 +3,7 @@ Welcome traveler! Don't be frightened by that *cryptc* name above. This project 
 
 ## Roadmap
 - [ ] own, better name generation
-- [ ] make `item_generator` its own struct with a builder pattern for generating items
+- [X] make `item_generator` its own struct with a builder pattern for generating items
 - [ ] implement game-worlds (2d/3d grid based)
   - [ ] implement random world generation
   - [ ] implement seeded world generation

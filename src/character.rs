@@ -2,6 +2,8 @@ use item::{Item, ItemType};
 use std::collections::HashMap;
 use inventory::Inventory;
 
+const DEXTERITY_INFLUENCE: f64 = 0.2;
+
 pub struct Character {
     name: String,
     attributes: HashMap<AttributeType, i64>,
@@ -33,6 +35,41 @@ impl Character {
     pub fn update_attribute(&mut self, attribute: &AttributeType, ammount: i64) {
         let mut attr = self.attributes.get(attribute).unwrap();
         attr = &ammount
+    }
+
+    pub fn attack_damage(&self) -> i64 {
+        let base_dexterity = self.attributes
+            .get(&AttributeType::Dexterity)
+            .expect("Unable to find attribute: AttributeType::Dexterity");
+
+        let base_dexterity = ((*base_dexterity as f64) * DEXTERITY_INFLUENCE) as i64;
+
+        let base_strength = self.attributes
+            .get(&AttributeType::Strength)
+            .expect("Unable to find attribute: AttributeType::Strength");
+
+        let mut additional_damage: i64 = 0;
+        if let Some(ref inner_item) = self.weapon_slot_left {
+            let influence = if inner_item.influences_type == AttributeType::Dexterity {
+                DEXTERITY_INFLUENCE
+            } else {
+                1_f64
+            };
+
+            additional_damage += ((inner_item.influences_by as f64) * influence) as i64;
+        }
+
+        if let Some(ref inner_item) = self.weapon_slot_right {
+            let influence = if inner_item.influences_type == AttributeType::Dexterity {
+                DEXTERITY_INFLUENCE
+            } else {
+                1_f64
+            };
+
+            additional_damage += ((inner_item.influences_by as f64) * influence) as i64;
+        }
+
+        base_strength + base_dexterity + additional_damage
     }
 
     pub fn get_attribute_value(&self, attribute: &AttributeType) -> i64 {
@@ -147,7 +184,7 @@ mod tests {
 
         assert_eq!(character.armor_slot_head, None);
 
-        let head_piece = item_generator::random_item_with_type(&ItemType::Armor);
+        let head_piece = item_generator::ItemGenerator::new().item_type(ItemType::Armor).gen();
         let head_piece_clone = head_piece.clone();
 
         character.set_armor_slot_head(Some(head_piece));
@@ -161,7 +198,7 @@ mod tests {
 
         assert_eq!(character.armor_slot_chest, None);
 
-        let chest_piece = item_generator::random_item_with_type(&ItemType::Armor);
+        let chest_piece = item_generator::ItemGenerator::new().item_type(ItemType::Armor).gen();
         let chest_piece_clone = chest_piece.clone();
 
         character.set_armor_slot_chest(Some(chest_piece));
@@ -175,7 +212,7 @@ mod tests {
 
         assert_eq!(character.armor_slot_legs, None);
 
-        let legs_piece = item_generator::random_item_with_type(&ItemType::Armor);
+        let legs_piece = item_generator::ItemGenerator::new().item_type(ItemType::Armor).gen();
         let legs_piece_clone = legs_piece.clone();
 
         character.set_armor_slot_legs(Some(legs_piece));
@@ -189,7 +226,7 @@ mod tests {
 
         assert_eq!(character.armor_slot_shoes, None);
 
-        let shoes_piece = item_generator::random_item_with_type(&ItemType::Armor);
+        let shoes_piece = item_generator::ItemGenerator::new().item_type(ItemType::Armor).gen();
         let shoes_piece_clone = shoes_piece.clone();
 
         character.set_armor_slot_shoes(Some(shoes_piece));
@@ -203,7 +240,7 @@ mod tests {
 
         assert_eq!(character.weapon_slot_right, None);
 
-        let weapon = item_generator::random_item_with_type(&ItemType::Weapon);
+        let weapon = item_generator::ItemGenerator::new().item_type(ItemType::Weapon).gen();
         let weapon_clone = weapon.clone();
 
         character.set_weapon_slot_right(Some(weapon));
@@ -217,7 +254,7 @@ mod tests {
 
         assert_eq!(character.weapon_slot_left, None);
 
-        let weapon = item_generator::random_item_with_type(&ItemType::Weapon);
+        let weapon = item_generator::ItemGenerator::new().item_type(ItemType::Weapon).gen();
         let weapon_clone = weapon.clone();
 
         character.set_weapon_slot_left(Some(weapon));

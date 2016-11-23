@@ -24,10 +24,6 @@ impl Item {
     pub fn can_be_stacked(&self) -> bool {
         self.stack_size > 1
     }
-
-    pub fn get_max_stack_size(&self) -> usize {
-        self.stack_size
-    }
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -35,6 +31,41 @@ pub enum ItemType {
     Armor,
     Consumable,
     Weapon,
+}
+
+impl ItemType {
+    pub fn attributes(&self) -> Vec<AttributeType> {
+        match *self {
+            ItemType::Consumable => vec![
+                AttributeType::Charisma,
+                AttributeType::Constitution,
+                AttributeType::Defense,
+                AttributeType::Dexterity,
+                AttributeType::Intelligence,
+                AttributeType::Luck,
+                AttributeType::Perception,
+                AttributeType::Strength,
+                AttributeType::Willpower,
+                AttributeType::Wisdom,
+            ],
+            ItemType::Weapon => vec![
+                AttributeType::Dexterity,
+                AttributeType::Strength,
+            ],
+            ItemType::Armor => vec![
+                AttributeType::Charisma,
+                AttributeType::Constitution,
+                AttributeType::Defense,
+                AttributeType::Dexterity,
+                AttributeType::Luck,
+                AttributeType::Perception,
+            ],
+        }
+    }
+
+    pub fn is_stackable(&self) -> bool {
+        *self == ItemType::Consumable
+    }
 }
 
 impl Rand for ItemType {
@@ -81,10 +112,10 @@ mod tests {
 
     #[test]
     fn can_be_equipped() {
-        let head_piece = item_generator::random_item_with_type(&ItemType::Armor);
+        let head_piece = item_generator::ItemGenerator::new().item_type(ItemType::Armor).gen();
         assert!(head_piece.can_be_equipped());
 
-        let head_piece = item_generator::random_item_with_type(&ItemType::Consumable);
+        let head_piece = item_generator::ItemGenerator::new().item_type(ItemType::Consumable).gen();
         assert!(!head_piece.can_be_equipped());
     }
 }
