@@ -7,14 +7,8 @@ mod inventory;
 mod item;
 mod item_generator;
 
-use character::Character;
+use character::*;
 
 fn main() {
-    let mut character = Character::new(String::from("Sheldon"));
-
-    for _ in 0..30 {
-        character.inventory.add_item(item_generator::random_item()).ok().unwrap()
-    }
-
-    println!("{:#?}", character.inventory);
+    let _dummy = Character::new(String::from("Sheldon"));
 }

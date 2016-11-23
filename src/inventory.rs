@@ -26,7 +26,7 @@ impl Inventory {
     pub fn add_item(&mut self, new_item: Item) -> Result<(), Item> {
         for slot in &mut self.contents {
             if slot.item == new_item {
-                if slot.item.get_max_stack_size() > slot.amount {
+                if slot.item.stack_size > slot.amount {
                     slot.amount += 1;
                     return Ok(());
                 }
@@ -58,7 +58,7 @@ mod tests {
         let mut inv_1 = Inventory::new();
 
         for i in 0..40 {
-            let random_item = item_generator::random_item_with_type(&ItemType::Armor);
+            let random_item = item_generator::ItemGenerator::new().item_type(ItemType::Armor).gen();
             if let Err(_) = inv_1.add_item(random_item) {
                 assert!(inv_1.is_full());
             }
@@ -69,32 +69,18 @@ mod tests {
     fn stackability() {
         let mut inv = Inventory::new();
 
-        let random_item_1 = item_generator::random_item_with_type(&ItemType::Consumable);
-        for i in 0..64 {
+        let random_item_1 = item_generator::ItemGenerator::new().item_type(ItemType::Consumable).gen();
+        for i in 0..random_item_1.stack_size {
             let _ = inv.add_item(random_item_1.clone());
         }
 
         assert!(!inv.is_full());
-        assert_eq!(inv.contents[0].amount, 64);
+        assert_eq!(inv.contents[0].amount, random_item_1.stack_size);
 
-        for i in 0..16 {
+        for i in 0..(random_item_1.stack_size / 4) {
             let _ = inv.add_item(random_item_1.clone());
         }
 
-        assert_eq!(inv.contents[1].amount, 16);
-
-        let random_item_2 = item_generator::random_item_with_type(&ItemType::Consumable);
-        for i in 0..64 {
-            let _ = inv.add_item(random_item_2.clone());
-        }
-
-        assert!(!inv.is_full());
-        assert_eq!(inv.contents[2].amount, 64);
-
-        for i in 0..16 {
-            let _ = inv.add_item(random_item_2.clone());
-        }
-
-        assert_eq!(inv.contents[3].amount, 16);
+        assert_eq!(inv.contents[1].amount, random_item_1.stack_size / 4);
     }
 }
