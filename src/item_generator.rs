@@ -1,5 +1,5 @@
 use item::*;
-use character::AttributeType;
+use character::Attribute;
 use rand::Rng;
 use rand;
 use names::{Generator, Name};
@@ -8,8 +8,7 @@ use names::{Generator, Name};
 pub struct ItemGenerator {
     data_name: Option<String>,
     data_item_type: Option<ItemType>,
-    data_influences_type: Option<AttributeType>,
-    data_influences_by: Option<i64>,
+    data_influence: Option<Option<ItemInfluence>>,
     data_stack_size: Option<usize>,
     data_rarity: Option<ItemRarity>,
 }
@@ -19,8 +18,7 @@ impl ItemGenerator {
         ItemGenerator {
             data_name: None,
             data_item_type: None,
-            data_influences_type: None,
-            data_influences_by: None,
+            data_influence: None,
             data_stack_size: None,
             data_rarity: None,
         }
@@ -36,13 +34,8 @@ impl ItemGenerator {
         self
     }
 
-    pub fn influences_type(mut self, influences_type: AttributeType) -> ItemGenerator {
-        self.data_influences_type = Some(influences_type);
-        self
-    }
-
-    pub fn influences_by(mut self, influences_by: i64) -> ItemGenerator {
-        self.data_influences_by = Some(influences_by);
+    pub fn influence(mut self, influence: Option<ItemInfluence>) -> ItemGenerator {
+        self.data_influence = Some(influence);
         self
     }
 
@@ -71,52 +64,71 @@ impl ItemGenerator {
             random_item_rarity()
         };
 
-        // The attribute influenced by the item
-        let influences_type = if let Some(ref inner_influences_type) = self.data_influences_type {
-            inner_influences_type.clone()
-        } else {
-            random_influences_type_by_item_type(&item_type)
-        };
+        // // The attribute influenced by the item
+        // let influences_attribute = if let Some(ref inner_influence_attribute) = self.data_influence_attribute {
+        //     inner_influence_attribute.clone()
+        // } else {
+        //     random_influence_attribute(&item_type)
+        // };
+        //
+        // // The amount, the item influences the attribute
+        // let influence_amount = if let Some(ref inner_influence_amount) = self.data_influence_amount {
+        //     *inner_influence_amount
+        // } else {
+        //     random_influence_amount(&rarity)
+        // };
 
-        // The amount, the item influences the attribute
-        let influences_by = if let Some(ref inner_influences_by) = self.data_influences_by {
-            *inner_influences_by
+        let influence = if let Some(ref inner_influence) = self.data_influence {
+            inner_influence.clone()
         } else {
-            random_influences_by_by_rarity(&rarity)
+            let is_none = rand::thread_rng().gen::<bool>();
+            if is_none || item_type.attributes().is_empty() {
+                None
+            } else {
+                Some(
+                    ItemInfluence {
+                        attribute: random_influence_attribute(&item_type),
+                        amount: random_influence_amount(&rarity),
+                    }
+                )
+            }
         };
 
         // The stacksize, the item can grow to (1 if not stackable)
         let stack_size = if let Some(ref inner_stack_size) = self.data_stack_size {
             *inner_stack_size
         } else {
-            random_stack_size_by_item_type(&item_type)
+            random_stack_size(&item_type)
         };
 
         // The name of the item
         let name = if let Some(ref inner_name) = self.data_name {
             inner_name.clone()
         } else {
-            random_item_name()
+            random_item_name(&item_type)
         };
 
         Item {
             name: name,
             item_type: item_type,
-            influences_type: influences_type,
-            influences_by: influences_by,
+            influence: influence,
             stack_size: stack_size,
             rarity: rarity,
         }
     }
 }
 
-fn random_influences_type_by_item_type(item_type: &ItemType) -> AttributeType {
+fn random_influence_attribute(item_type: &ItemType) -> Attribute {
     let mut attrbute_set = item_type.attributes();
-    let index = rand::thread_rng().gen_range(0, attrbute_set.len());
-    attrbute_set.remove(index)
+    if attrbute_set.is_empty() {
+        Attribute::Charisma
+    } else {
+        let index = rand::thread_rng().gen_range(0, attrbute_set.len());
+        attrbute_set.remove(index)
+    }
 }
 
-fn random_influences_by_by_rarity(item_rarity: &ItemRarity) -> i64 {
+fn random_influence_amount(item_rarity: &ItemRarity) -> ItemInfluenceAmount {
     let mut rng = rand::thread_rng();
     let result = match *item_rarity {
         ItemRarity::Common => rng.gen_range(-1, 10),
@@ -133,8 +145,92 @@ fn random_influences_by_by_rarity(item_rarity: &ItemRarity) -> i64 {
     }
 }
 
-fn random_item_name() -> String {
-    Generator::with_naming(Name::Plain).next().unwrap()
+fn random_item_name(item_type: &ItemType) -> String {
+    match *item_type {
+        ItemType::WeaponSword |
+        ItemType::WeaponHammer |
+        ItemType::WeaponWand
+         => random_weapon_name(),
+        _ => Generator::with_naming(Name::Plain).next().unwrap(),
+    }
+}
+
+fn random_weapon_name() -> String {
+    let mut weapon_names: Vec<String> = vec![
+        "Sword",
+        "Boulder",
+        "Wand",
+        "Dagger",
+        "Hammer",
+        "Rifle",
+    ].into_iter()
+    .map(|string|{ String::from(string) })
+    .collect();
+
+    let weapon_name = rand::thread_rng().gen_range(0, weapon_names.len());
+    let weapon_name = weapon_names.remove(weapon_name);
+
+    let mut weapon_prefixes: Vec<String> = vec![
+        "Shiny",
+        "Firey",
+        "Wonderous",
+        "Giant",
+    ].into_iter()
+    .map(|string|{ String::from(string) })
+    .collect();
+
+    let weapon_prefix = rand::thread_rng().gen_range(0, weapon_prefixes.len());
+    let weapon_prefix = weapon_prefixes.remove(weapon_prefix);
+
+    let mut weapon_suffixes: Vec<String> = vec![
+        "Nashioce",
+        "Gobloygro",
+        "Vuskia",
+        "Lawhos",
+        "Shiyle",
+        "Steiwana",
+        "Ashington",
+        "Ustistan",
+        "Plez Chium",
+        "Staej Slua",
+        "Ospaewana",
+        "Wespeugua",
+        "Cuchein",
+        "Keflya",
+        "Speyle",
+        "Swainia",
+        "Eswijan",
+        "Uswein",
+        "Scok Slya",
+        "Proz Drana",
+        "Decruecia",
+        "Vospoydan",
+        "Xesneau",
+        "Japlax",
+        "Scuecia",
+        "Dreina",
+        "Uswela",
+        "Usten",
+        "Smen Snana",
+        "Glan Gra",
+        "Puswaenia",
+        "Jepraoles",
+        "Pasla",
+        "Ewhium",
+        "Floulia",
+        "Plioso",
+        "Aplurg",
+        "Escines",
+        "Groyt Thington",
+        "Fleiw Flen",
+    ].into_iter()
+    .map(|string|{ String::from(string) })
+    .collect();
+
+    let weapon_suffix = rand::thread_rng().gen_range(0, weapon_suffixes.len());
+    let weapon_suffix = weapon_suffixes.remove(weapon_suffix);
+
+    format!("{} {} of {}", weapon_prefix, weapon_name, weapon_suffix)
 }
 
 fn random_item_type() -> ItemType {
@@ -145,7 +241,7 @@ fn random_item_rarity() -> ItemRarity {
     rand::thread_rng().gen::<ItemRarity>()
 }
 
-fn random_stack_size_by_item_type(item_type: &ItemType) -> usize {
+fn random_stack_size(item_type: &ItemType) -> usize {
     let mut base_sizes = vec![4, 16, 64];
     if item_type.is_stackable() {
         let index = rand::thread_rng().gen_range(0, base_sizes.len());
@@ -153,20 +249,19 @@ fn random_stack_size_by_item_type(item_type: &ItemType) -> usize {
     } else {
         1
     }
-
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use item::{ItemType, ItemRarity};
-    use character::AttributeType;
+    use item::{ItemType, ItemRarity, ItemInfluence};
+    use character::Attribute;
 
     #[test]
     fn builder_item_type() {
-        let rnd_item = ItemGenerator::new().item_type(ItemType::Armor).gen();
+        let rnd_item = ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
 
-        assert_eq!(rnd_item.item_type, ItemType::Armor);
+        assert_eq!(rnd_item.item_type, ItemType::ArmorHead);
     }
 
     #[test]
@@ -179,17 +274,19 @@ mod tests {
     }
 
     #[test]
-    fn builder_influences_type() {
-        let rnd_item = ItemGenerator::new().influences_type(AttributeType::Strength).gen();
+    fn builder_influence_attribute() {
+        let influence = Some(
+            ItemInfluence {
+                attribute: Attribute::Strength,
+                amount: 123,
+            }
+        );
+        let rnd_item = ItemGenerator::new().influence(influence).gen();
 
-        assert_eq!(rnd_item.influences_type, AttributeType::Strength);
-    }
+        let item_influence = rnd_item.influence.unwrap();
 
-    #[test]
-    fn builder_influences_by() {
-        let rnd_item = ItemGenerator::new().influences_by(122).gen();
-
-        assert_eq!(rnd_item.influences_by, 122);
+        assert_eq!(item_influence.attribute, Attribute::Strength);
+        assert_eq!(item_influence.amount, 123);
     }
 
     #[test]
