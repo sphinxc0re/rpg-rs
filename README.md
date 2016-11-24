@@ -8,7 +8,7 @@ Welcome traveler! Don't be frightened by that *cryptc* name above. This project 
 - [ ] implement game-world loading from file
 - [ ] implement level/campagne/world scripting through a derived ASM dialect
 - [ ] make output interface more common and move everything into a crate
-- [ ] adapt `influence` from items to `ItemGenerator`
+- [X] adapt `influence` from items to `ItemGenerator`
 - [ ] add `requirement` to `Item`
 - [ ] make item name and attribute generation more fine-grained, related to the item's type
 - [ ] model out entites
