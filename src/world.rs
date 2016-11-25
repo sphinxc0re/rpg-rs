@@ -11,11 +11,13 @@ pub enum FieldType {
 }
 
 pub struct Level {
+    name: String,
     starting_point: (usize, usize),
     end_point: (usize, usize),
     data: Vec<Vec<Field>>,
 }
 
 pub struct Campagne {
+    name: String,
     levels: Vec<Level>,
 }

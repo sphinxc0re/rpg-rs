@@ -2,7 +2,6 @@ use item::{Item, ItemType, ItemInfluence};
 use std::collections::HashMap;
 use inventory::Inventory;
 use types::{Health, AttributeValue};
-use entity::HasInventory;
 
 const DEXTERITY_INFLUENCE: f64 = 0.2;
 
@@ -17,12 +16,6 @@ pub struct Character {
     weapon_slot_left: Option<Item>,
     weapon_slot_right: Option<Item>,
     inventory: Inventory,
-}
-
-impl<'a> HasInventory<'a> for Character {
-    fn inventory(&'a self) -> &'a Inventory {
-        &self.inventory
-    }
 }
 
 impl Character {
@@ -41,6 +34,8 @@ impl Character {
             inventory: Inventory::new(),
         }
     }
+
+
 
     pub fn update_attribute(&mut self, attribute: &Attribute, value: AttributeValue) {
         let mut attr = self.attributes.get(attribute).unwrap();
