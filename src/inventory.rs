@@ -1,4 +1,10 @@
 use item::Item;
+use prettytable::Table;
+use prettytable::row::Row;
+use prettytable::cell::Cell;
+use prettytable::format;
+use prettytable::format::Alignment;
+use term::Attr;
 
 #[derive(Debug)]
 pub struct InventorySlot {
@@ -30,13 +36,21 @@ impl Inventory {
             };
         }
 
-        let index_width = ((self.max_size as f32).log10().floor() as usize) + 1;
 
-        let mut index = 0;
+        let mut table = Table::new();
+        table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+        table.set_titles(row!["Index", "Name", "Amount"]);
+        let mut index: usize = 0;
         for &InventorySlot { ref item, ref amount } in &self.contents {
-            println!("{index:>index_width$}: {item:<item_width$}  {amount}", index=index, item=item.name, index_width=index_width, item_width=max_width, amount=amount);
+            let mut index_cell = Cell::from(&index);
+            index_cell.align(Alignment::RIGHT);
+
+            let mut item_cell = Cell::from(&item.name);
+            item_cell.style(Attr::ForegroundColor(0x00AAFF));
+            table.add_row(row![index_cell, item.name, amount]);
             index += 1;
         }
+        table.printstd();
     }
 
     /// Adds an item to the inventory. If the inventory is full, the item won't be added to the
