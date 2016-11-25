@@ -1,6 +1,6 @@
 [package]
-name = "txtrpg-rs"
-version = "0.1.0"
+name = "rpg"
+version = "0.0.1"
 authors = ["Julian Laubstein <contact@julianlaubstein.de>"]
 
 [dependencies]
