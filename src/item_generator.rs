@@ -3,6 +3,7 @@ use character::Attribute;
 use rand::Rng;
 use rand;
 use names::{Generator, Name};
+use types::AttributeValue;
 
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct ItemGenerator {
@@ -128,7 +129,7 @@ fn random_influence_attribute(item_type: &ItemType) -> Attribute {
     }
 }
 
-fn random_influence_amount(item_rarity: &ItemRarity) -> ItemInfluenceAmount {
+fn random_influence_amount(item_rarity: &ItemRarity) -> AttributeValue {
     let mut rng = rand::thread_rng();
     let result = match *item_rarity {
         ItemRarity::Common => rng.gen_range(-1, 10),
@@ -274,13 +275,8 @@ mod tests {
     }
 
     #[test]
-    fn builder_influence_attribute() {
-        let influence = Some(
-            ItemInfluence {
-                attribute: Attribute::Strength,
-                amount: 123,
-            }
-        );
+    fn builder_influence() {
+        let influence = Some(ItemInfluence::new(Attribute::Strength, 123));
         let rnd_item = ItemGenerator::new().influence(influence).gen();
 
         let item_influence = rnd_item.influence.unwrap();

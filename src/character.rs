@@ -1,12 +1,10 @@
 use item::{Item, ItemType, ItemInfluence};
 use std::collections::HashMap;
 use inventory::Inventory;
+use types::{Health, AttributeValue};
+use entity::HasInventory;
 
 const DEXTERITY_INFLUENCE: f64 = 0.2;
-
-pub type Health = usize;
-
-pub type AttributeValue = i64;
 
 pub struct Character {
     name: String,
@@ -18,7 +16,13 @@ pub struct Character {
     armor_slot_feet: Option<Item>,
     weapon_slot_left: Option<Item>,
     weapon_slot_right: Option<Item>,
-    pub inventory: Inventory,
+    inventory: Inventory,
+}
+
+impl<'a> HasInventory<'a> for Character {
+    fn inventory(&'a self) -> &'a Inventory {
+        &self.inventory
+    }
 }
 
 impl Character {
