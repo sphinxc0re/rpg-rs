@@ -1,5 +1,6 @@
 use character::Attribute;
 use rand::{Rand, Rng};
+use types::AttributeValue;
 
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Item {
@@ -33,13 +34,11 @@ impl Item {
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct ItemInfluence {
     pub attribute: Attribute,
-    pub amount: ItemInfluenceAmount,
+    pub amount: AttributeValue,
 }
 
-pub type ItemInfluenceAmount = i64;
-
 impl ItemInfluence {
-    pub fn new(attribute: Attribute, amount: ItemInfluenceAmount) -> ItemInfluence {
+    pub fn new(attribute: Attribute, amount: AttributeValue) -> ItemInfluence {
         ItemInfluence {
             attribute: attribute,
             amount: amount,

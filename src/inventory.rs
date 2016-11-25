@@ -30,8 +30,12 @@ impl Inventory {
             };
         }
 
+        let index_width = ((self.max_size as f32).log10().floor() as usize) + 1;
+
+        let mut index = 0;
         for &InventorySlot { ref item, ref amount } in &self.contents {
-            println!("{item:<width$}  {amount}", item=item.name, width=max_width, amount=amount);
+            println!("{index:>index_width$}: {item:<item_width$}  {amount}", index=index, item=item.name, index_width=index_width, item_width=max_width, amount=amount);
+            index += 1;
         }
     }
 

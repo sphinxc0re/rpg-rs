@@ -9,9 +9,9 @@ mod item_generator;
 mod item;
 mod world;
 mod entity;
+mod types;
 
 use inventory::Inventory;
-use item::ItemType;
 
 fn main() {
     let mut inv = Inventory::new();
