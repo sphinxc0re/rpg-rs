@@ -2,10 +2,17 @@ use behaviour::Behaviour;
 use event::Event;
 
 pub struct Entity {
-    behaviour: Vec<Box<Behaviour>>
+    name: String,
+    behaviour: Vec<Box<Behaviour>>,
 }
 
 impl Entity {
+    pub fn new(name: &str) -> Entity {
+        Entity {
+            name: name.to_owned(),
+            behaviour: Vec::new()
+        }
+    }
     pub fn append_behaviour(&mut self, behaviour: Box<Behaviour>) {
         self.behaviour.push(behaviour);
     }

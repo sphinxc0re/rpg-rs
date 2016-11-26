@@ -5,7 +5,6 @@ authors = ["Julian Laubstein <contact@julianlaubstein.de>"]
 description = "A very basic RPG engine written in Rust"
 repository = "https://github.com/rust-rpg/rpg-rs"
 readme = "README.md"
-license = "MIT"
 license-file = "LICENSE"
 
 [dependencies]
