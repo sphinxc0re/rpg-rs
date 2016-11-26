@@ -7,7 +7,7 @@
 //! This library should be used to build RPGs. Sounds simple and also should be, but when building
 //! an RPG from scratch, most people tent to write the same code over and over again. This library
 //! aims to completely implmement most of the **very basic** elements of an RPG. This is because
-//! there exists a huge diversity in terms of RPGs. There os not one definite model.
+//! there exists a huge diversity in terms of RPGs. There is not one definite model.
 
 extern crate names;
 extern crate rand;
@@ -17,14 +17,14 @@ extern crate term;
 extern crate prettytable;
 
 #[macro_use]
-mod macros;
+pub mod macros;
 
-mod behaviour;
-mod character;
-mod entity;
-mod event;
-mod inventory;
-mod item_generator;
-mod item;
-mod types;
-mod world;
+pub mod behaviour;
+pub mod character;
+pub mod entity;
+pub mod event;
+pub mod inventory;
+pub mod item_generator;
+pub mod item;
+pub mod types;
+pub mod world;

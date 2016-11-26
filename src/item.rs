@@ -1,3 +1,5 @@
+//!
+
 use character::Attribute;
 use rand::{Rand, Rng};
 use types::AttributeValue;
