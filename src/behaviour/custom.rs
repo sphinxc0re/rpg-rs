@@ -21,3 +21,17 @@ impl Behaviour for Custom {
         (self.handler)(event)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use event::Event;
+    use entity::Entity;
+
+    #[test]
+    fn new_custom() {
+        let custom = Custom::new(|event| {
+            Event::Nothing
+        });
+    }
+}
