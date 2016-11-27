@@ -1,4 +1,7 @@
-#![deny(missing_docs)]
+#![forbid(missing_docs)]
+#![forbid(unsafe_code)]
+#![forbid(unused_extern_crates)]
+#![forbid(unused_import_braces)]
 
 //! # rpg-rs
 //! A **very basic** RPG engine written in Rust
@@ -12,9 +15,6 @@
 extern crate names;
 extern crate rand;
 extern crate rustc_serialize;
-extern crate term;
-#[macro_use]
-extern crate prettytable;
 
 #[macro_use]
 pub mod macros;

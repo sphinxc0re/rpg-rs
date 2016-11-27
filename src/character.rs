@@ -31,7 +31,7 @@ impl Character {
             armor_slot_feet: None,
             weapon_slot_left: None,
             weapon_slot_right: None,
-            inventory: Inventory::new(),
+            inventory: Inventory::new(30),
         }
     }
 

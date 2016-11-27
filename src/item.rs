@@ -180,8 +180,8 @@ impl Rand for ItemRarity {
             0 ... 750 => ItemRarity::Common,
             751 ... 917 => ItemRarity::Uncommon,
             918 ... 972 => ItemRarity::Rare,
-            873 ... 959 => ItemRarity::Epic,
-            960 ... 1000 => ItemRarity::Legendary,
+            873 ... 979 => ItemRarity::Epic,
+            980 ... 1000 => ItemRarity::Legendary,
             _ => ItemRarity::Common,
         }
     }
