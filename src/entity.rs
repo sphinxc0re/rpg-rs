@@ -1,18 +1,22 @@
 use behaviour::Behaviour;
 use event::Event;
 
+/// Any non-character element
 pub struct Entity {
     name: String,
     behaviour: Vec<Box<Behaviour>>,
 }
 
 impl Entity {
-    pub fn new(name: &str) -> Entity {
+    /// Creates a new instance of `Entity`
+    pub fn new(name: String) -> Entity {
         Entity {
-            name: name.to_owned(),
+            name: name,
             behaviour: Vec::new()
         }
     }
+
+    /// Adds a behaviour ot the behaviour chain of the entity
     pub fn append_behaviour(&mut self, behaviour: Box<Behaviour>) {
         self.behaviour.push(behaviour);
     }
