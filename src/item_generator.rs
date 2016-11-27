@@ -5,6 +5,7 @@ use rand;
 use names::{Generator, Name};
 use types::AttributeValue;
 
+/// A builder like generator for items. Missing fields are filled randomly
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct ItemGenerator {
     data_name: Option<String>,
@@ -15,6 +16,7 @@ pub struct ItemGenerator {
 }
 
 impl ItemGenerator {
+    /// Creates a new instance of `ItemGenerator`
     pub fn new() -> ItemGenerator {
         ItemGenerator {
             data_name: None,
@@ -25,31 +27,37 @@ impl ItemGenerator {
         }
     }
 
+    /// Sets the `name` of the item
     pub fn name(mut self, name: String) -> ItemGenerator {
         self.data_name = Some(name);
         self
     }
 
+    /// Sets the `item_type` of the item
     pub fn item_type(mut self, item_type: ItemType) -> ItemGenerator {
         self.data_item_type = Some(item_type);
         self
     }
 
+    /// Sets the `influence` of the item
     pub fn influence(mut self, influence: Option<ItemInfluence>) -> ItemGenerator {
         self.data_influence = Some(influence);
         self
     }
 
+    /// Sets the `stack_size` of the item
     pub fn stack_size(mut self, stack_size: usize) -> ItemGenerator {
         self.data_stack_size = Some(stack_size);
         self
     }
 
+    /// Sets the `rarity` of the item
     pub fn rarity(mut self, rarity: ItemRarity) -> ItemGenerator {
         self.data_rarity = Some(rarity);
         self
     }
 
+    /// Generates the item using the given data. Missing data will be filed randomly
     pub fn gen(&self) -> Item {
         // The item type
         let item_type = if let Some(ref inner_item_type) = self.data_item_type {

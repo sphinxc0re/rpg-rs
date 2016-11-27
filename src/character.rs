@@ -40,8 +40,8 @@ impl Character {
 
     /// Updates the given attribute
     pub fn update_attribute(&mut self, attribute: &Attribute, value: AttributeValue) {
-        let mut attr = self.attributes.get(attribute).unwrap();
-        attr = &value;
+        let mut _attr = self.attributes.get(attribute).unwrap();
+        _attr = &value;
     }
 
     /// Calculates and returns the current attack damage of the character based on the attibutes
