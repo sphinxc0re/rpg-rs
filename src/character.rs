@@ -3,8 +3,10 @@ use std::collections::HashMap;
 use inventory::Inventory;
 use types::{Health, AttributeValue};
 
+/// The influence the `Attribute::Dexterity` has on the attack_damage of the character
 const DEXTERITY_INFLUENCE: f64 = 0.2;
 
+/// The character the player is impersonating
 pub struct Character {
     name: String,
     health: Health,
@@ -19,6 +21,7 @@ pub struct Character {
 }
 
 impl Character {
+    /// Creates a new instance of `Character`
     pub fn new(name: String) -> Character {
         let attribute_map = Self::default_attributes();
         Character {
@@ -31,17 +34,17 @@ impl Character {
             armor_slot_feet: None,
             weapon_slot_left: None,
             weapon_slot_right: None,
-            inventory: Inventory::new(),
+            inventory: Inventory::new(30),
         }
     }
 
-
-
+    /// Updates the given attribute
     pub fn update_attribute(&mut self, attribute: &Attribute, value: AttributeValue) {
-        let mut attr = self.attributes.get(attribute).unwrap();
-        attr = &value
+        let mut _attr = self.attributes.get(attribute).unwrap();
+        _attr = &value;
     }
 
+    /// Calculates and returns the current attack damage of the character based on the attibutes
     pub fn attack_damage(&self) -> AttributeValue {
         let base_dexterity = self.attributes
         .get(&Attribute::Dexterity)
@@ -82,10 +85,13 @@ impl Character {
         base_strength + base_dexterity + additional_damage
     }
 
+    /// Returns the value of the specified attribute
     pub fn get_attribute_value(&self, attribute: &Attribute) -> AttributeValue {
         *self.attributes.get(attribute).unwrap()
     }
 
+    /// A setter method for the head armor slot. **Panics** whether the given item is not
+    /// of type `ItemType::ArmorHead`
     pub fn set_armor_slot_head(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
             assert_eq!(inner_item.item_type, ItemType::ArmorHead);
@@ -94,6 +100,8 @@ impl Character {
         self.armor_slot_head = item;
     }
 
+    /// A setter method for the chest armor slot. **Panics** whether the given item is not
+    /// of type `ItemType::ArmorChest`
     pub fn set_armor_slot_chest(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
             assert_eq!(inner_item.item_type, ItemType::ArmorChest);
@@ -102,6 +110,8 @@ impl Character {
         self.armor_slot_chest = item;
     }
 
+    /// A setter method for the legs armor slot. **Panics** whether the given item is not
+    /// of type `ItemType::ArmorLegs`
     pub fn set_armor_slot_legs(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
             assert_eq!(inner_item.item_type, ItemType::ArmorLegs);
@@ -110,6 +120,8 @@ impl Character {
         self.armor_slot_legs = item;
     }
 
+    /// A setter method for the feet armor slot. **Panics** whether the given item is not
+    /// of type `ItemType::ArmorFeet`
     pub fn set_armor_slot_feet(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
             assert_eq!(inner_item.item_type, ItemType::ArmorFeet);
@@ -118,14 +130,17 @@ impl Character {
         self.armor_slot_feet = item;
     }
 
+    /// A setter method for the right weapon slot
     pub fn set_weapon_slot_right(&mut self, item: Option<Item>) {
         self.weapon_slot_right = item;
     }
 
+    /// A setter method for the left weapon slot
     pub fn set_weapon_slot_left(&mut self, item: Option<Item>) {
         self.weapon_slot_left = item;
     }
 
+    /// Returns the default attributes for a character
     pub fn default_attributes() -> HashMap<Attribute, AttributeValue> {
         let mut attribute_map = HashMap::new();
 
@@ -144,22 +159,31 @@ impl Character {
     }
 }
 
-
-vec_enum! {
-    #[derive(Clone, Eq, PartialEq, Hash, Debug)]
-    pub enum Attribute {
-        Charisma,
-        Constitution,
-        Defense,
-        Dexterity,
-        Intelligence,
-        Luck,
-        Perception,
-        Strength,
-        Willpower,
-        Wisdom
-    }
+/// A list of all possible attributes
+#[derive(Clone, Eq, PartialEq, Hash, Debug)]
+pub enum Attribute {
+    /// The charisma of a character
+    Charisma,
+    /// The constitution of a character
+    Constitution,
+    /// The defense of a character
+    Defense,
+    /// The dexterity of a character
+    Dexterity,
+    /// The intelligence of a character
+    Intelligence,
+    /// The luck of a character
+    Luck,
+    /// The perception of a character
+    Perception,
+    /// The strength of a character
+    Strength,
+    /// The willpower of a character
+    Willpower,
+    /// The wisdom of a character
+    Wisdom
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -167,19 +191,6 @@ mod tests {
 
     use item_generator;
     use item::ItemType;
-
-    #[test]
-    fn default_attributes() {
-        let mut attributes = Character::default_attributes();
-
-        assert_eq!(attributes.len(), Attribute::as_vec().len());
-
-        for default in Attribute::as_vec() {
-            attributes.remove(&default);
-        }
-
-        assert_eq!(attributes.len(), 0);
-    }
 
     #[test]
     fn set_armor_slot_head() {

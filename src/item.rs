@@ -2,16 +2,23 @@ use character::Attribute;
 use rand::{Rand, Rng};
 use types::AttributeValue;
 
+/// An item
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Item {
+    /// The name of the item
     pub name: String,
+    /// The type of the item
     pub item_type: ItemType,
+    /// The influence of the item (optional)
     pub influence: Option<ItemInfluence>,
+    /// The stack size of the item
     pub stack_size: usize,
+    /// The rarity of the item
     pub rarity: ItemRarity,
 }
 
 impl Item {
+    /// Returns `true` if the item can be equipped
     pub fn can_be_equipped(&self) -> bool {
         let equipable = vec![
             ItemType::ArmorHead,
@@ -26,18 +33,23 @@ impl Item {
         equipable.contains(&self.item_type)
     }
 
+    /// Returns `true` if the item can be stacked
     pub fn can_be_stacked(&self) -> bool {
         self.stack_size > 1
     }
 }
 
+/// The influence an item can have on a certain attribute
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct ItemInfluence {
+    /// The attribute that is influenced
     pub attribute: Attribute,
+    /// The amount about which the attribute is influenced
     pub amount: AttributeValue,
 }
 
 impl ItemInfluence {
+    /// Creates a new `ItemInfluence` object
     pub fn new(attribute: Attribute, amount: AttributeValue) -> ItemInfluence {
         ItemInfluence {
             attribute: attribute,
@@ -46,25 +58,38 @@ impl ItemInfluence {
     }
 }
 
+/// The type of an item
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub enum ItemType {
+    /// Armor that can only be put into the `armor_slot_head` of a character
     ArmorHead,
+    /// Armor that can only be put into the `armor_slot_chest` of a character
     ArmorChest,
+    /// Armor that can only be put into the `armor_slot_legs` of a character
     ArmorLegs,
+    /// Armor that can only be put into the `armor_slot_feet` of a character
     ArmorFeet,
 
+    /// A potion
     ConsumablePotion,
+    /// Some kind of food
     ConsumableFood,
 
+    /// Some kind of sword
     WeaponSword,
+    /// Some kind of wand
     WeaponWand,
+    /// Some kind of hammer
     WeaponHammer,
 
+    /// A usable item
     Usable,
+    /// A useless prop
     Prop,
 }
 
 impl ItemType {
+    /// A list of attributes an `ItemType` can influence
     pub fn attributes(&self) -> Vec<Attribute> {
         match *self {
             ItemType::ConsumableFood |
@@ -106,6 +131,7 @@ impl ItemType {
         }
     }
 
+    /// Returns `true` if the item created using this type should be stackable
     pub fn is_stackable(&self) -> bool {
         let stackable_types = vec![
             ItemType::ConsumableFood,
@@ -161,12 +187,18 @@ impl Rand for ItemType {
     }
 }
 
+/// A type defining the rarity of an item
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub enum ItemRarity {
+    /// Items are found very often
     Common,
+    /// Items are still found pretty often but not that often
     Uncommon,
+    /// Items are found much rarer
     Rare,
+    /// Items are extremely rare
     Epic,
+    /// Items are so rare, you might never find them anywhere
     Legendary,
 }
 
@@ -178,8 +210,8 @@ impl Rand for ItemRarity {
             0 ... 750 => ItemRarity::Common,
             751 ... 917 => ItemRarity::Uncommon,
             918 ... 972 => ItemRarity::Rare,
-            873 ... 959 => ItemRarity::Epic,
-            960 ... 1000 => ItemRarity::Legendary,
+            873 ... 979 => ItemRarity::Epic,
+            980 ... 1000 => ItemRarity::Legendary,
             _ => ItemRarity::Common,
         }
     }
