@@ -16,15 +16,25 @@ extern crate names;
 extern crate rand;
 extern crate rustc_serialize;
 
+/// Useful macros
 #[macro_use]
 pub mod macros;
 
+/// The behaviour of entities
 pub mod behaviour;
+/// The structures used to bulid a character
 pub mod character;
+/// Everything regarding entities
 pub mod entity;
+/// The structure of events
 pub mod event;
+/// The structure and mechanics of an inventory
 pub mod inventory;
+/// Generate random items
 pub mod item_generator;
+/// The structure of items
 pub mod item;
+/// A module for global type consitency
 pub mod types;
+/// Structures for saving and loading a game world
 pub mod world;
