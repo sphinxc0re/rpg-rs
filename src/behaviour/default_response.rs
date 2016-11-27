@@ -14,8 +14,8 @@ impl DefaultResponse {
 }
 
 impl Behaviour for DefaultResponse {
-    fn react(&self, to: Event) -> Event {
-        match to {
+    fn handle_event(&self, event: Event) -> Event {
+        match event {
             _ => Event::Tell(self.response.clone())
         }
     }

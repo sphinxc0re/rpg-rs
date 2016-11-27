@@ -19,16 +19,16 @@ impl Entity {
 }
 
 impl Behaviour for Entity {
-    fn react(&self, to: Event) -> Event {
+    fn handle_event(&self, event: Event) -> Event {
         let mut last_event = Event::Nothing;
         let mut first_run = true;
 
         for ref behaviour in &self.behaviour {
             if first_run {
                 first_run = false;
-                last_event = behaviour.react(to.clone());
+                last_event = behaviour.handle_event(event.clone());
             } else {
-                last_event = behaviour.react(last_event);
+                last_event = behaviour.handle_event(last_event);
             }
         }
 

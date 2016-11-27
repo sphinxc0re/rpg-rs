@@ -1,6 +1,3 @@
-//! The world, the story of the game is taking place in. A 2d grid consisting of simple fields
-//! which usually consist of some material
-
 use entity::Entity;
 
 /// A single field of the world

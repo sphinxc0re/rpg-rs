@@ -1,5 +1,5 @@
 use event::Event;
 
 pub trait Behaviour {
-    fn react(&self, to: Event) -> Event;
+    fn handle_event(&self, event: Event) -> Event;
 }

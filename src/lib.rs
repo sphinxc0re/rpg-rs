@@ -1,6 +1,5 @@
 #![forbid(missing_docs)]
 #![forbid(unsafe_code)]
-#![forbid(unused_extern_crates)]
 #![forbid(unused_import_braces)]
 
 //! # rpg-rs
@@ -15,10 +14,6 @@
 extern crate names;
 extern crate rand;
 extern crate rustc_serialize;
-
-/// Useful macros
-#[macro_use]
-pub mod macros;
 
 /// The behaviour of entities
 pub mod behaviour;
