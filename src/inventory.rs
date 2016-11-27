@@ -1,11 +1,13 @@
 use item::Item;
 
+/// A single slot of the inventory
 #[derive(Debug)]
 pub struct InventorySlot {
     item: Item,
     amount: usize,
 }
 
+/// An inventory holding items
 #[derive(Debug)]
 pub struct Inventory {
     contents: Vec<InventorySlot>,
@@ -13,6 +15,7 @@ pub struct Inventory {
 }
 
 impl Inventory {
+    /// Creates a new instance of `Inventory`
     pub fn new(max_size: usize) -> Inventory {
         Inventory {
             contents: Vec::new(),
@@ -41,6 +44,7 @@ impl Inventory {
         Ok(())
     }
 
+    /// Returns `true` it the inventory is full
     pub fn is_full(&self) -> bool {
         self.contents.len() == self.max_size
     }
