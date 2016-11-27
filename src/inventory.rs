@@ -58,7 +58,7 @@ mod tests {
 
     #[test]
     fn inventory_full() {
-        let mut inv_1 = Inventory::new();
+        let mut inv_1 = Inventory::new(30);
 
         for i in 0..40 {
             let random_item = item_generator::ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
@@ -70,7 +70,7 @@ mod tests {
 
     #[test]
     fn stackability() {
-        let mut inv = Inventory::new();
+        let mut inv = Inventory::new(30);
 
         let random_item_1 = item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
         for i in 0..random_item_1.stack_size {
