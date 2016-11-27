@@ -1,4 +1,4 @@
-# rpg-rs [![Crates.io](https://img.shields.io/crates/v/rpg.svg)](https://crates.io/crates/rpg) [![Build Status](https://travis-ci.org/raven-rpg/rpg-rs.svg?branch=master)](https://travis-ci.org/rust-rpg/rpg-rs)
+# rpg-rs [![Crates.io](https://img.shields.io/crates/v/rpg.svg)](https://crates.io/crates/rpg) [![Build Status](https://travis-ci.org/raven-rpg/rpg-rs.svg?branch=master)](https://travis-ci.org/raven-rpg/rpg-rs)
 Welcome traveler! Don't be frightened by that *cryptc* name above. This project aims to implement the **very basic** data and mechanics of an RPG. Of course, there are a lot of ways to interpret and implement an RPG and I guess there will always be someone who disagrees with my implementation. So feel free to contribute and share the code and if this doesn't feel right to you, create a fork and create your own better variant.
 
 ## Roadmap
