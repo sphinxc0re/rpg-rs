@@ -39,3 +39,21 @@ impl Behaviour for Entity {
         last_event
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use behaviour::Custom;
+    use event::Event;
+
+    #[test]
+    fn append_behaviour() {
+        let custom = Custom::new(|event| {
+            Event::Nothing
+        });
+
+        let mut entity = Entity::new("TestSubject".to_string());
+
+        entity.append_behaviour(Box::new(custom));
+    }
+}
