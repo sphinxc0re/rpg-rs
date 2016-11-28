@@ -20,6 +20,11 @@ impl Entity {
     pub fn append_behaviour(&mut self, behaviour: Box<Behaviour>) {
         self.behaviour.push(behaviour);
     }
+
+    /// Sends and event to the entity
+    pub fn send_event(&self, event: Event) -> Event {
+        self.handle_event(event)
+    }
 }
 
 impl Behaviour for Entity {
@@ -55,5 +60,7 @@ mod tests {
         let mut entity = Entity::new("TestSubject".to_string());
 
         entity.append_behaviour(Box::new(custom));
+
+        entity.send_event(Event::Nothing);
     }
 }
