@@ -1,5 +1,4 @@
 use rustc_serialize::json;
-use rustc_serialize::json::DecoderError;
 use std::io::prelude::*;
 use std::fs::File;
 
@@ -10,7 +9,7 @@ pub struct Field {
     pub field_type: FieldType,
     /// The height of the field. Used for collision detection
     pub height: u8,
-    /// The contained entity (optional)
+    /// The id if the contained entity (optional)
     pub contained_entity: Option<usize>,
 }
 
@@ -74,12 +73,12 @@ impl Campagne {
             Ok(file) => file,
         };
 
-        let campagne = match json::encode::<Campagne>(self) {
+        let campagne = match json::encode(self) {
             Err(_) => return,
             Ok(campagne) => campagne,
         };
 
-        match f.write_all(b"Hello, world!") {
+        match f.write_all(campagne.as_bytes()) {
             Err(_) => {},
             Ok(_) => {},
         };
@@ -98,7 +97,7 @@ impl Campagne {
             Ok(_) => {},
         };
 
-        match json::decode::<Campagne>(s.as_str()) {
+        match json::decode(s.as_str()) {
             Err(_) => return Err(file_name),
             Ok(campagne) => Ok(campagne),
         }
