@@ -36,7 +36,10 @@ impl Inventory {
         }
 
         if self.contents.len() < self.max_size {
-            self.contents.push(InventorySlot { item: new_item, amount: 1 });
+            self.contents.push(InventorySlot {
+                item: new_item,
+                amount: 1,
+            });
         } else {
             return Err(new_item);
         }
@@ -61,7 +64,8 @@ mod tests {
         let mut inv_1 = Inventory::new(30);
 
         for i in 0..40 {
-            let random_item = item_generator::ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
+            let random_item =
+                item_generator::ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
             if let Err(_) = inv_1.add_item(random_item) {
                 assert!(inv_1.is_full());
             }
@@ -72,7 +76,8 @@ mod tests {
     fn stackability() {
         let mut inv = Inventory::new(30);
 
-        let random_item_1 = item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
+        let random_item_1 =
+            item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
         for i in 0..random_item_1.stack_size {
             let _ = inv.add_item(random_item_1.clone());
         }

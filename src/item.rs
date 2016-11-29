@@ -20,15 +20,13 @@ pub struct Item {
 impl Item {
     /// Returns `true` if the item can be equipped
     pub fn can_be_equipped(&self) -> bool {
-        let equipable = vec![
-            ItemType::ArmorHead,
-            ItemType::ArmorChest,
-            ItemType::ArmorLegs,
-            ItemType::ArmorFeet,
-            ItemType::WeaponSword,
-            ItemType::WeaponWand,
-            ItemType::WeaponHammer,
-        ];
+        let equipable = vec![ItemType::ArmorHead,
+                             ItemType::ArmorChest,
+                             ItemType::ArmorLegs,
+                             ItemType::ArmorFeet,
+                             ItemType::WeaponSword,
+                             ItemType::WeaponWand,
+                             ItemType::WeaponHammer];
 
         equipable.contains(&self.item_type)
     }
@@ -93,50 +91,37 @@ impl ItemType {
     pub fn attributes(&self) -> Vec<Attribute> {
         match *self {
             ItemType::ConsumableFood |
-            ItemType::ConsumablePotion
-            => vec![
-                Attribute::Charisma,
-                Attribute::Constitution,
-                Attribute::Defense,
-                Attribute::Dexterity,
-                Attribute::Intelligence,
-                Attribute::Luck,
-                Attribute::Perception,
-                Attribute::Strength,
-                Attribute::Willpower,
-                Attribute::Wisdom,
-            ],
-            ItemType::WeaponHammer |
-            ItemType::WeaponSword |
-            ItemType::WeaponWand
-            => vec![
-                Attribute::Dexterity,
-                Attribute::Strength,
-            ],
-            ItemType::ArmorHead |
-            ItemType::ArmorChest |
-            ItemType::ArmorLegs |
-            ItemType::ArmorFeet
-            => vec![
-                Attribute::Charisma,
-                Attribute::Constitution,
-                Attribute::Defense,
-                Attribute::Dexterity,
-                Attribute::Luck,
-                Attribute::Perception,
-            ],
-            ItemType::Usable |
-            ItemType::Prop
-            => vec![]
+            ItemType::ConsumablePotion => {
+                vec![Attribute::Charisma,
+                     Attribute::Constitution,
+                     Attribute::Defense,
+                     Attribute::Dexterity,
+                     Attribute::Intelligence,
+                     Attribute::Luck,
+                     Attribute::Perception,
+                     Attribute::Strength,
+                     Attribute::Willpower,
+                     Attribute::Wisdom]
+            }
+            ItemType::WeaponHammer | ItemType::WeaponSword | ItemType::WeaponWand => {
+                vec![Attribute::Dexterity, Attribute::Strength]
+            }
+            ItemType::ArmorHead | ItemType::ArmorChest | ItemType::ArmorLegs |
+            ItemType::ArmorFeet => {
+                vec![Attribute::Charisma,
+                     Attribute::Constitution,
+                     Attribute::Defense,
+                     Attribute::Dexterity,
+                     Attribute::Luck,
+                     Attribute::Perception]
+            }
+            ItemType::Usable | ItemType::Prop => vec![],
         }
     }
 
     /// Returns `true` if the item created using this type should be stackable
     pub fn is_stackable(&self) -> bool {
-        let stackable_types = vec![
-            ItemType::ConsumableFood,
-            ItemType::ConsumablePotion,
-        ];
+        let stackable_types = vec![ItemType::ConsumableFood, ItemType::ConsumablePotion];
 
         stackable_types.contains(self)
     }
@@ -147,41 +132,41 @@ impl Rand for ItemType {
         let base = rng.gen_range(0, 1000);
 
         match base {
-            0 ... 250 => {
+            0...250 => {
                 let base = rng.gen_range(0, 1000);
                 match base {
-                    0 ... 500 => ItemType::ConsumableFood,
-                    501 ... 1000 => ItemType::ConsumablePotion,
+                    0...500 => ItemType::ConsumableFood,
+                    501...1000 => ItemType::ConsumablePotion,
                     _ => ItemType::Prop,
                 }
-            },
-            251 ... 500 => {
+            }
+            251...500 => {
                 let base = rng.gen_range(0, 1000);
                 match base {
-                    0 ... 250 => ItemType::ArmorHead,
-                    251 ... 500 => ItemType::ArmorChest,
-                    501 ... 750 => ItemType::ArmorLegs,
-                    751 ... 1000 => ItemType::ArmorFeet,
+                    0...250 => ItemType::ArmorHead,
+                    251...500 => ItemType::ArmorChest,
+                    501...750 => ItemType::ArmorLegs,
+                    751...1000 => ItemType::ArmorFeet,
                     _ => ItemType::Prop,
                 }
-            },
-            501 ... 750 => {
+            }
+            501...750 => {
                 let base = rng.gen_range(0, 1000);
                 match base {
-                    0 ... 333 => ItemType::WeaponHammer,
-                    334 ... 666 => ItemType::WeaponSword,
-                    667 ... 1000 => ItemType::WeaponWand,
+                    0...333 => ItemType::WeaponHammer,
+                    334...666 => ItemType::WeaponSword,
+                    667...1000 => ItemType::WeaponWand,
                     _ => ItemType::Prop,
                 }
-            },
-            751 ... 1000 => {
+            }
+            751...1000 => {
                 let base = rng.gen_range(0, 1000);
                 match base {
-                    0 ... 500 => ItemType::Usable,
-                    501 ... 1000 => ItemType::Prop,
+                    0...500 => ItemType::Usable,
+                    501...1000 => ItemType::Prop,
                     _ => ItemType::Prop,
                 }
-            },
+            }
             _ => ItemType::Prop,
         }
     }
@@ -207,11 +192,11 @@ impl Rand for ItemRarity {
         let base = rng.gen_range(0, 1000);
 
         match base {
-            0 ... 750 => ItemRarity::Common,
-            751 ... 917 => ItemRarity::Uncommon,
-            918 ... 972 => ItemRarity::Rare,
-            873 ... 979 => ItemRarity::Epic,
-            980 ... 1000 => ItemRarity::Legendary,
+            0...750 => ItemRarity::Common,
+            751...917 => ItemRarity::Uncommon,
+            918...972 => ItemRarity::Rare,
+            873...979 => ItemRarity::Epic,
+            980...1000 => ItemRarity::Legendary,
             _ => ItemRarity::Common,
         }
     }
@@ -227,7 +212,8 @@ mod tests {
         let head_piece = item_generator::ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
         assert!(head_piece.can_be_equipped());
 
-        let head_piece = item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
+        let head_piece =
+            item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
         assert!(!head_piece.can_be_equipped());
     }
 }

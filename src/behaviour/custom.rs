@@ -9,10 +9,9 @@ pub struct Custom {
 impl Custom {
     /// Creates a new instance of `Custom`
     pub fn new<F: 'static>(handler: F) -> Custom
-        where F: Fn(Event) -> Event {
-        Custom {
-            handler: Box::new(handler)
-        }
+        where F: Fn(Event) -> Event
+    {
+        Custom { handler: Box::new(handler) }
     }
 }
 
@@ -30,8 +29,6 @@ mod tests {
 
     #[test]
     fn new_custom() {
-        let custom = Custom::new(|event| {
-            Event::Nothing
-        });
+        let custom = Custom::new(|event| Event::Nothing);
     }
 }

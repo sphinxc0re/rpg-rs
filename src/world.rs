@@ -79,8 +79,8 @@ impl Campagne {
         };
 
         match f.write_all(campagne.as_bytes()) {
-            Err(_) => {},
-            Ok(_) => {},
+            Err(_) => {}
+            Ok(_) => {}
         };
     }
 
@@ -94,7 +94,7 @@ impl Campagne {
         let mut s = String::new();
         match f.read_to_string(&mut s) {
             Err(_) => return Err(file_name),
-            Ok(_) => {},
+            Ok(_) => {}
         };
 
         match json::decode(s.as_str()) {

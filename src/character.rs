@@ -47,14 +47,14 @@ impl Character {
     /// Calculates and returns the current attack damage of the character based on the attibutes
     pub fn attack_damage(&self) -> AttributeValue {
         let base_dexterity = self.attributes
-        .get(&Attribute::Dexterity)
-        .expect("Unable to find attribute: Attribute::Dexterity");
+            .get(&Attribute::Dexterity)
+            .expect("Unable to find attribute: Attribute::Dexterity");
 
         let base_dexterity = ((*base_dexterity as f64) * DEXTERITY_INFLUENCE) as AttributeValue;
 
         let base_strength = self.attributes
-        .get(&Attribute::Strength)
-        .expect("Unable to find attribute: Attribute::Strength");
+            .get(&Attribute::Strength)
+            .expect("Unable to find attribute: Attribute::Strength");
 
         let mut additional_damage: i64 = 0;
         if let Some(ref inner_item) = self.weapon_slot_left {
@@ -181,7 +181,7 @@ pub enum Attribute {
     /// The willpower of a character
     Willpower,
     /// The wisdom of a character
-    Wisdom
+    Wisdom,
 }
 
 
@@ -212,7 +212,8 @@ mod tests {
 
         assert_eq!(character.armor_slot_chest, None);
 
-        let chest_piece = item_generator::ItemGenerator::new().item_type(ItemType::ArmorChest).gen();
+        let chest_piece =
+            item_generator::ItemGenerator::new().item_type(ItemType::ArmorChest).gen();
         let chest_piece_clone = chest_piece.clone();
 
         character.set_armor_slot_chest(Some(chest_piece));

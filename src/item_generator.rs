@@ -94,12 +94,10 @@ impl ItemGenerator {
             if is_none || item_type.attributes().is_empty() {
                 None
             } else {
-                Some(
-                    ItemInfluence {
-                        attribute: random_influence_attribute(&item_type),
-                        amount: random_influence_amount(&rarity),
-                    }
-                )
+                Some(ItemInfluence {
+                    attribute: random_influence_attribute(&item_type),
+                    amount: random_influence_amount(&rarity),
+                })
             }
         };
 
@@ -147,94 +145,79 @@ fn random_influence_amount(item_rarity: &ItemRarity) -> AttributeValue {
         ItemRarity::Legendary => rng.gen_range(100, 500),
     };
 
-    if result == 0 {
-        1
-    } else {
-        result
-    }
+    if result == 0 { 1 } else { result }
 }
 
 fn random_item_name(item_type: &ItemType) -> String {
     match *item_type {
-        ItemType::WeaponSword |
-        ItemType::WeaponHammer |
-        ItemType::WeaponWand
-         => random_weapon_name(),
+        ItemType::WeaponSword | ItemType::WeaponHammer | ItemType::WeaponWand => {
+            random_weapon_name()
+        }
         _ => Generator::with_naming(Name::Plain).next().unwrap(),
     }
 }
 
 fn random_weapon_name() -> String {
-    let mut weapon_names: Vec<String> = vec![
-        "Sword",
-        "Boulder",
-        "Wand",
-        "Dagger",
-        "Hammer",
-        "Rifle",
-    ].into_iter()
-    .map(|string|{ String::from(string) })
-    .collect();
+    let mut weapon_names: Vec<String> = vec!["Sword", "Boulder", "Wand", "Dagger", "Hammer",
+                                             "Rifle"]
+        .into_iter()
+        .map(|string| String::from(string))
+        .collect();
 
     let weapon_name = rand::thread_rng().gen_range(0, weapon_names.len());
     let weapon_name = weapon_names.remove(weapon_name);
 
-    let mut weapon_prefixes: Vec<String> = vec![
-        "Shiny",
-        "Firey",
-        "Wonderous",
-        "Giant",
-    ].into_iter()
-    .map(|string|{ String::from(string) })
-    .collect();
+    let mut weapon_prefixes: Vec<String> = vec!["Shiny", "Firey", "Wonderous", "Giant"]
+        .into_iter()
+        .map(|string| String::from(string))
+        .collect();
 
     let weapon_prefix = rand::thread_rng().gen_range(0, weapon_prefixes.len());
     let weapon_prefix = weapon_prefixes.remove(weapon_prefix);
 
-    let mut weapon_suffixes: Vec<String> = vec![
-        "Nashioce",
-        "Gobloygro",
-        "Vuskia",
-        "Lawhos",
-        "Shiyle",
-        "Steiwana",
-        "Ashington",
-        "Ustistan",
-        "Plez Chium",
-        "Staej Slua",
-        "Ospaewana",
-        "Wespeugua",
-        "Cuchein",
-        "Keflya",
-        "Speyle",
-        "Swainia",
-        "Eswijan",
-        "Uswein",
-        "Scok Slya",
-        "Proz Drana",
-        "Decruecia",
-        "Vospoydan",
-        "Xesneau",
-        "Japlax",
-        "Scuecia",
-        "Dreina",
-        "Uswela",
-        "Usten",
-        "Smen Snana",
-        "Glan Gra",
-        "Puswaenia",
-        "Jepraoles",
-        "Pasla",
-        "Ewhium",
-        "Floulia",
-        "Plioso",
-        "Aplurg",
-        "Escines",
-        "Groyt Thington",
-        "Fleiw Flen",
-    ].into_iter()
-    .map(|string|{ String::from(string) })
-    .collect();
+    let mut weapon_suffixes: Vec<String> = vec!["Nashioce",
+                                                "Gobloygro",
+                                                "Vuskia",
+                                                "Lawhos",
+                                                "Shiyle",
+                                                "Steiwana",
+                                                "Ashington",
+                                                "Ustistan",
+                                                "Plez Chium",
+                                                "Staej Slua",
+                                                "Ospaewana",
+                                                "Wespeugua",
+                                                "Cuchein",
+                                                "Keflya",
+                                                "Speyle",
+                                                "Swainia",
+                                                "Eswijan",
+                                                "Uswein",
+                                                "Scok Slya",
+                                                "Proz Drana",
+                                                "Decruecia",
+                                                "Vospoydan",
+                                                "Xesneau",
+                                                "Japlax",
+                                                "Scuecia",
+                                                "Dreina",
+                                                "Uswela",
+                                                "Usten",
+                                                "Smen Snana",
+                                                "Glan Gra",
+                                                "Puswaenia",
+                                                "Jepraoles",
+                                                "Pasla",
+                                                "Ewhium",
+                                                "Floulia",
+                                                "Plioso",
+                                                "Aplurg",
+                                                "Escines",
+                                                "Groyt Thington",
+                                                "Fleiw Flen"]
+        .into_iter()
+        .map(|string| String::from(string))
+        .collect();
 
     let weapon_suffix = rand::thread_rng().gen_range(0, weapon_suffixes.len());
     let weapon_suffix = weapon_suffixes.remove(weapon_suffix);
