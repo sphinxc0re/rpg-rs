@@ -31,5 +31,5 @@ pub mod item_generator;
 pub mod item;
 /// A module for global type consitency
 pub mod types;
-/// Structures for saving and loading a game world
+/// Structures for saving, loading and playing a game world
 pub mod world;
