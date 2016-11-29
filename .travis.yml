@@ -17,10 +17,9 @@ before_script:
   - export PATH=$HOME/.local/bin:$PATH
 script:
   - export PATH=$PATH:~/.cargo/bin
-  - travis-cargo fmt -- --write-mode=diff
-  - travis-cargo build --verbose
-  - travis-cargo test --verbose
-  - travis-cargo --only stable doc
+  - cargo fmt -- --write-mode=diff
+  - travis-cargo build
+  - travis-cargo test
 after_success:
   - travis-cargo coveralls --no-sudo --verify
 matrix:
