@@ -12,7 +12,7 @@ impl Entity {
     pub fn new(name: String) -> Entity {
         Entity {
             name: name,
-            behaviour: Vec::new()
+            behaviour: Vec::new(),
         }
     }
 
@@ -53,9 +53,7 @@ mod tests {
 
     #[test]
     fn append_behaviour() {
-        let custom = Custom::new(|event| {
-            Event::Nothing
-        });
+        let custom = Custom::new(|event| Event::Nothing);
 
         let mut entity = Entity::new("TestSubject".to_string());
 
