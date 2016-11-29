@@ -1,4 +1,11 @@
 language: rust
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - binutils-dev
 rust:
   - stable
   - beta
@@ -6,11 +13,15 @@ rust:
 cache: cargo
 before_script:
   - (cargo install rustfmt || true)
+  - pip install 'travis-cargo<0.2' --user
+  - export PATH=$HOME/.local/bin:$PATH
 script:
   - export PATH=$PATH:~/.cargo/bin
   - cargo fmt -- --write-mode=diff
-  - cargo build --verbose
-  - cargo test --verbose
+  - travis-cargo build
+  - travis-cargo test
+after_success:
+  - travis-cargo coveralls --no-sudo --verify
 matrix:
   allow_failures:
     - rust: nightly
