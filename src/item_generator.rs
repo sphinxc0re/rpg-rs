@@ -73,20 +73,6 @@ impl ItemGenerator {
             random_item_rarity()
         };
 
-        // // The attribute influenced by the item
-        // let influences_attribute = if let Some(ref inner_influence_attribute) = self.data_influence_attribute {
-        //     inner_influence_attribute.clone()
-        // } else {
-        //     random_influence_attribute(&item_type)
-        // };
-        //
-        // // The amount, the item influences the attribute
-        // let influence_amount = if let Some(ref inner_influence_amount) = self.data_influence_amount {
-        //     *inner_influence_amount
-        // } else {
-        //     random_influence_amount(&rarity)
-        // };
-
         let influence = if let Some(ref inner_influence) = self.data_influence {
             inner_influence.clone()
         } else {
