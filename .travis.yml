@@ -1,3 +1,4 @@
+sudo: false
 language: rust
 addons:
   apt:
@@ -6,6 +7,9 @@ addons:
       - libelf-dev
       - libdw-dev
       - binutils-dev
+      - cmake
+    sources:
+      - kalakris-cmake
 rust:
   - stable
   - beta
@@ -13,15 +17,14 @@ rust:
 cache: cargo
 before_script:
   - (cargo install rustfmt || true)
-  - pip install 'travis-cargo<0.2' --user
-  - export PATH=$HOME/.local/bin:$PATH
+  - cargo install cargo-travis
+  - export PATH=$HOME/.cargo/bin:$PATH
 script:
-  - export PATH=$PATH:~/.cargo/bin
   - cargo fmt -- --write-mode=diff
-  - travis-cargo build
-  - travis-cargo test
+  - cargo build --verbose
+  - cargo test --verbose
 after_success:
-  - travis-cargo coveralls --no-sudo --verify
+  - cargo coveralls
 matrix:
   allow_failures:
     - rust: nightly
