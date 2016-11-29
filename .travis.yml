@@ -17,7 +17,7 @@ rust:
 cache: cargo
 before_script:
   - (cargo install rustfmt || true)
-  - cargo install cargo-travis
+  - (cargo install cargo-travis || true)
   - export PATH=$HOME/.cargo/bin:$PATH
 script:
   - cargo fmt -- --write-mode=diff
