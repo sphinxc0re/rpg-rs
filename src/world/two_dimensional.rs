@@ -67,9 +67,9 @@ pub struct Campagne {
 
 impl Campagne {
     /// Creates a new instance of `Campagne`
-    pub fn new(title: String) -> Campagne {
+    pub fn new(title: &str) -> Campagne {
         Campagne {
-            title: title,
+            title: title.to_owned(),
             levels: Vec::new(),
         }
     }
@@ -123,7 +123,7 @@ mod tests {
 
     #[test]
     fn save_and_load() {
-        let camp = Campagne::new(String::from("Adventure Time!"));
+        let camp = Campagne::new("Adventure Time!");
         camp.save_to_file("test.json");
 
         let new_camp = Campagne::load_from_file("test.json").ok().unwrap();

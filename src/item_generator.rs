@@ -28,8 +28,8 @@ impl ItemGenerator {
     }
 
     /// Sets the `name` of the item
-    pub fn name(mut self, name: String) -> ItemGenerator {
-        self.data_name = Some(name);
+    pub fn name(mut self, name: &str) -> ItemGenerator {
+        self.data_name = Some(name.to_owned());
         self
     }
 
@@ -253,7 +253,7 @@ mod tests {
     fn builder_name() {
         let random_name = String::from("Totally random item");
 
-        let rnd_item = ItemGenerator::new().name(random_name.clone()).gen();
+        let rnd_item = ItemGenerator::new().name(random_name.clone().as_str()).gen();
 
         assert_eq!(rnd_item.name, random_name);
     }

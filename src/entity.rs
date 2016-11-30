@@ -9,9 +9,9 @@ pub struct Entity {
 
 impl Entity {
     /// Creates a new instance of `Entity`
-    pub fn new(name: String) -> Entity {
+    pub fn new(name: &str) -> Entity {
         Entity {
-            name: name,
+            name: name.to_owned(),
             behaviour: Vec::new(),
         }
     }
@@ -55,7 +55,7 @@ mod tests {
     fn append_behaviour() {
         let custom = Custom::new(|event| Event::Nothing);
 
-        let mut entity = Entity::new("TestSubject".to_string());
+        let mut entity = Entity::new("TestSubject");
 
         entity.append_behaviour(Box::new(custom));
 
