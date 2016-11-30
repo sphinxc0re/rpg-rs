@@ -30,5 +30,11 @@ mod tests {
     #[test]
     fn new_custom() {
         let custom = Custom::new(|event| Event::Nothing);
+
+        let mut entity = Entity::new("TestEntity");
+
+        entity.append_behaviour(Box::new(custom));
+
+        assert_eq!(entity.send_event(Event::Nothing), Event::Nothing);
     }
 }
