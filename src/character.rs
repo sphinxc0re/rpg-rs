@@ -40,8 +40,7 @@ impl Character {
 
     /// Updates the given attribute
     pub fn update_attribute(&mut self, attribute: &Attribute, value: AttributeValue) {
-        let mut _attr = self.attributes.get(attribute).unwrap();
-        _attr = &value;
+        *self.attributes.get_mut(attribute).unwrap() = value;
     }
 
     /// Calculates and returns the current attack damage of the character based on the attibutes
@@ -275,5 +274,22 @@ mod tests {
         character.set_weapon_slot_left(Some(weapon));
 
         assert_eq!(character.weapon_slot_left, Some(weapon_clone));
+    }
+
+    #[test]
+    fn attribute_mutation() {
+        let mut character = Character::new("Wil Wheaton");
+
+        character.update_attribute(&Attribute::Dexterity, 42);
+
+        assert_eq!(character.get_attribute_value(&Attribute::Dexterity), 42);
+    }
+
+    #[test]
+    fn basic_attack_damage() {
+        let character = Character::new("Wil Wheaton");
+
+        // 22 is the very basic attack damage
+        assert_eq!(character.attack_damage(), 22);
     }
 }
