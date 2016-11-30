@@ -33,7 +33,7 @@ mod tests {
 
         let mut entity = Entity::new("TestEntity");
 
-        entity.append_behaviour(Box::new(custom));
+        entity.append_behaviour(custom);
 
         assert_eq!(entity.send_event(Event::Nothing), Event::Nothing);
     }
