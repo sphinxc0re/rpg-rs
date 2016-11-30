@@ -232,14 +232,21 @@ fn random_stack_size(item_type: &ItemType) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use item::{ItemType, ItemRarity, ItemInfluence};
     use character::Attribute;
+    use item::{ItemType, ItemRarity, ItemInfluence};
+    use rand;
+    use rand::Rng;
 
     #[test]
     fn builder_item_type() {
-        let rnd_item = ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
+        let mut rng = rand::thread_rng();
+        for _ in 0..2000 {
+            let rnd_type = rng.gen::<ItemType>();
 
-        assert_eq!(rnd_item.item_type, ItemType::ArmorHead);
+            let rnd_item = ItemGenerator::new().item_type(rnd_type.clone()).gen();
+
+            assert_eq!(rnd_item.item_type, rnd_type);
+        }
     }
 
     #[test]

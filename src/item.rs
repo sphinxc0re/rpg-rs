@@ -216,4 +216,13 @@ mod tests {
             item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
         assert!(!head_piece.can_be_equipped());
     }
+
+    #[test]
+    fn can_be_stacked() {
+        let head_piece = item_generator::ItemGenerator::new().stack_size(4).gen();
+        assert!(head_piece.can_be_stacked());
+
+        let head_piece = item_generator::ItemGenerator::new().stack_size(1).gen();
+        assert!(!head_piece.can_be_stacked());
+    }
 }

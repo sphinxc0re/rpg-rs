@@ -1,7 +1,7 @@
 use item::Item;
 
 /// A primitive event type
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Event {
     /// Talk to an entity
     Tell(String),

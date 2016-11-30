@@ -59,6 +59,8 @@ mod tests {
 
         entity.append_behaviour(Box::new(custom));
 
-        entity.send_event(Event::Nothing);
+        let res = entity.send_event(Event::Nothing);
+
+        assert_eq!(res, Event::Nothing);
     }
 }
