@@ -20,3 +20,15 @@ impl Behaviour for DefaultResponse {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use event::Event;
+    use entity::Entity;
+
+    #[test]
+    fn new_custom() {
+        let custom = DefaultResponse::new("Responsy!");
+    }
+}

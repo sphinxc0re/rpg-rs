@@ -66,6 +66,19 @@ pub struct Campagne {
 }
 
 impl Campagne {
+    /// Creates a new instance of `Campagne`
+    pub fn new(title: &str) -> Campagne {
+        Campagne {
+            title: title.to_owned(),
+            levels: Vec::new(),
+        }
+    }
+
+    /// Adds a level to the campagne
+    pub fn add_level(&mut self, level: Level) {
+        self.levels.push(level);
+    }
+
     /// Saves the campagne to the specified file
     pub fn save_to_file(&self, file_name: &str) {
         let mut f = match File::create(file_name) {
@@ -101,5 +114,20 @@ impl Campagne {
             Err(_) => return Err(file_name),
             Ok(campagne) => Ok(campagne),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn save_and_load() {
+        let camp = Campagne::new("Adventure Time!");
+        camp.save_to_file("test.json");
+
+        let new_camp = Campagne::load_from_file("test.json").ok().unwrap();
+
+        assert_eq!(camp.title, new_camp.title);
     }
 }

@@ -28,8 +28,8 @@ impl ItemGenerator {
     }
 
     /// Sets the `name` of the item
-    pub fn name(mut self, name: String) -> ItemGenerator {
-        self.data_name = Some(name);
+    pub fn name(mut self, name: &str) -> ItemGenerator {
+        self.data_name = Some(name.to_owned());
         self
     }
 
@@ -232,21 +232,28 @@ fn random_stack_size(item_type: &ItemType) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use item::{ItemType, ItemRarity, ItemInfluence};
     use character::Attribute;
+    use item::{ItemType, ItemRarity, ItemInfluence};
+    use rand;
+    use rand::Rng;
 
     #[test]
     fn builder_item_type() {
-        let rnd_item = ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
+        let mut rng = rand::thread_rng();
+        for _ in 0..2000 {
+            let rnd_type = rng.gen::<ItemType>();
 
-        assert_eq!(rnd_item.item_type, ItemType::ArmorHead);
+            let rnd_item = ItemGenerator::new().item_type(rnd_type.clone()).gen();
+
+            assert_eq!(rnd_item.item_type, rnd_type);
+        }
     }
 
     #[test]
     fn builder_name() {
         let random_name = String::from("Totally random item");
 
-        let rnd_item = ItemGenerator::new().name(random_name.clone()).gen();
+        let rnd_item = ItemGenerator::new().name(random_name.clone().as_str()).gen();
 
         assert_eq!(rnd_item.name, random_name);
     }

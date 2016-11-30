@@ -22,10 +22,10 @@ pub struct Character {
 
 impl Character {
     /// Creates a new instance of `Character`
-    pub fn new(name: String) -> Character {
+    pub fn new(name: &str) -> Character {
         let attribute_map = Self::default_attributes();
         Character {
-            name: name,
+            name: name.to_owned(),
             health: (&attribute_map)[&Attribute::Constitution] as Health,
             attributes: attribute_map,
             armor_slot_head: None,
@@ -194,7 +194,7 @@ mod tests {
 
     #[test]
     fn set_armor_slot_head() {
-        let mut character = Character::new(String::from("TestCharacter"));
+        let mut character = Character::new("TestCharacter");
 
         assert_eq!(character.armor_slot_head, None);
 
@@ -208,7 +208,7 @@ mod tests {
 
     #[test]
     fn set_armor_slot_chest() {
-        let mut character = Character::new(String::from("TestCharacter"));
+        let mut character = Character::new("TestCharacter");
 
         assert_eq!(character.armor_slot_chest, None);
 
@@ -223,7 +223,7 @@ mod tests {
 
     #[test]
     fn set_armor_slot_legs() {
-        let mut character = Character::new(String::from("TestCharacter"));
+        let mut character = Character::new("TestCharacter");
 
         assert_eq!(character.armor_slot_legs, None);
 
@@ -237,7 +237,7 @@ mod tests {
 
     #[test]
     fn set_armor_slot_feet() {
-        let mut character = Character::new(String::from("TestCharacter"));
+        let mut character = Character::new("TestCharacter");
 
         assert_eq!(character.armor_slot_feet, None);
 
@@ -251,7 +251,7 @@ mod tests {
 
     #[test]
     fn set_weapon_slot_right() {
-        let mut character = Character::new(String::from("TestCharacter"));
+        let mut character = Character::new("TestCharacter");
 
         assert_eq!(character.weapon_slot_right, None);
 
@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn set_weapon_slot_left() {
-        let mut character = Character::new(String::from("TestCharacter"));
+        let mut character = Character::new("TestCharacter");
 
         assert_eq!(character.weapon_slot_left, None);
 
