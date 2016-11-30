@@ -28,7 +28,14 @@ mod tests {
     use entity::Entity;
 
     #[test]
-    fn new_custom() {
-        let custom = DefaultResponse::new("Responsy!");
+    fn new_default_response() {
+        let default_response = DefaultResponse::new("Responsy!");
+
+        let mut entity = Entity::new("TestEntity");
+
+        entity.append_behaviour(Box::new(default_response));
+
+        assert_eq!(entity.send_event(Event::Nothing),
+                   Event::Tell(String::from("Responsy!")));
     }
 }

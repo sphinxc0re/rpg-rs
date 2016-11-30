@@ -63,7 +63,7 @@ mod tests {
     fn inventory_full() {
         let mut inv_1 = Inventory::new(30);
 
-        for i in 0..40 {
+        for _ in 0..40 {
             let random_item =
                 item_generator::ItemGenerator::new().item_type(ItemType::ArmorHead).gen();
             if let Err(_) = inv_1.add_item(random_item) {
@@ -78,13 +78,13 @@ mod tests {
 
         let random_item_1 =
             item_generator::ItemGenerator::new().item_type(ItemType::ConsumablePotion).gen();
-        for i in 0..random_item_1.stack_size {
+        for _ in 0..random_item_1.stack_size {
             let _ = inv.add_item(random_item_1.clone());
         }
 
         assert_eq!(inv.contents[0].amount, random_item_1.stack_size);
 
-        for i in 0..(random_item_1.stack_size / 4) {
+        for _ in 0..(random_item_1.stack_size / 4) {
             let _ = inv.add_item(random_item_1.clone());
         }
 
