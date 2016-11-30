@@ -17,8 +17,8 @@ impl Entity {
     }
 
     /// Adds a behaviour ot the behaviour chain of the entity
-    pub fn append_behaviour(&mut self, behaviour: Box<Behaviour>) {
-        self.behaviour.push(behaviour);
+    pub fn append_behaviour<T: Behaviour + 'static>(&mut self, behaviour: T) {
+        self.behaviour.push(Box::new(behaviour));
     }
 
     /// Sends and event to the entity
@@ -57,7 +57,7 @@ mod tests {
 
         let mut entity = Entity::new("TestSubject");
 
-        entity.append_behaviour(Box::new(custom));
+        entity.append_behaviour(custom);
 
         let res = entity.send_event(Event::Nothing);
 
