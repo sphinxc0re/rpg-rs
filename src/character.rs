@@ -189,7 +189,7 @@ mod tests {
     use super::*;
 
     use item_generator;
-    use item::ItemType;
+    use item::{ItemType, ItemInfluence};
 
     #[test]
     fn set_armor_slot_head() {
@@ -291,5 +291,20 @@ mod tests {
 
         // 22 is the very basic attack damage
         assert_eq!(character.attack_damage(), 22);
+    }
+
+    #[test]
+    fn attack_damage_with_weapons() {
+        let mut character = Character::new("Wil Wheaton");
+
+        let weapon = item_generator::ItemGenerator::new()
+            .item_type(ItemType::WeaponSword)
+            .influence(Some(ItemInfluence::new(Attribute::Strength, 10)))
+            .gen();
+
+        character.set_weapon_slot_left(Some(weapon.clone()));
+        character.set_weapon_slot_right(Some(weapon.clone()));
+
+        assert_eq!(character.attack_damage(), 42);
     }
 }
