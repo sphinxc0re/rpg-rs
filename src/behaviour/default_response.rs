@@ -1,7 +1,8 @@
 use event::Event;
-use behaviour::Behaviour;
+use super::Behaviour;
 
 /// A default reponse when a character is talking to an entity
+#[derive(Clone)]
 pub struct DefaultResponse {
     response: String,
 }

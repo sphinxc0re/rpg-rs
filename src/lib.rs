@@ -33,3 +33,5 @@ pub mod item;
 pub mod types;
 /// Structures for saving, loading and playing a game world
 pub mod world;
+/// The actual engine to run the game and handle the IO
+pub mod engine;
