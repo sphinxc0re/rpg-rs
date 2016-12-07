@@ -1,6 +1,6 @@
 [package]
 name = "rpg"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Julian Laubstein <contact@julianlaubstein.de>"]
 description = "A very basic RPG engine written in Rust"
 repository = "https://github.com/rust-rpg/rpg-rs"
