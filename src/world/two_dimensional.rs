@@ -123,12 +123,12 @@ impl World2d {
 
         let mut result = true;
 
-        if x < width {
+        if x > width {
             result = false;
             println!("x is out of bounds");
         }
 
-        if y < height {
+        if y > height {
             result = false;
             println!("y is out of bounds");
         }

@@ -35,9 +35,10 @@ impl<W: World> Engine<W> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use world::two_dimensional::World2d;
 
     #[test]
     fn new_engine() {
-        unimplemented!()
+        let engine: Engine<World2d> = Engine::new();
     }
 }
