@@ -3,7 +3,7 @@ use event::Event;
 /// A behaviour defining how entities react to certain events
 pub trait Behaviour: BehaviourClone {
     /// Handle an event
-    fn handle_event(&self, event: Event) -> Event;
+    fn handle_event(&self, Event) -> Event;
 }
 
 /// A helper trait for cloning `Behaviour` objects

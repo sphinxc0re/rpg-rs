@@ -15,10 +15,8 @@ impl DefaultResponse {
 }
 
 impl Behaviour for DefaultResponse {
-    fn handle_event(&self, event: Event) -> Event {
-        match event {
-            _ => Event::Tell(self.response.clone()),
-        }
+    fn handle_event(&self, _: Event) -> Event {
+        Event::Tell(self.response.clone())
     }
 }
 

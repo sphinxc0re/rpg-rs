@@ -98,6 +98,7 @@ impl World2d {
 
     /// A builder method for setting the starting point of the world
     pub fn starting_point(mut self, starting_point: (usize, usize)) -> World2d {
+        assert!(self.is_valid_coord(starting_point));
         self.starting_point = starting_point;
         self.current_position = starting_point;
         self
@@ -105,17 +106,34 @@ impl World2d {
 
     /// A builder method for setting the end point of the world
     pub fn end_point(mut self, end_point: (usize, usize)) -> World2d {
+        assert!(self.is_valid_coord(end_point));
         self.end_point = end_point;
         self
     }
 
     /// Sets the given field at the given position
     pub fn set_field(&mut self, field: Field, position: (usize, usize)) {
-        let (x, y) = position;
+        assert!(self.is_valid_coord(position));
+        self.data[position.0][position.1] = field;
+    }
+
+    fn is_valid_coord(&mut self, coords: (usize, usize)) -> bool {
+        let (x, y) = coords;
         let (width, height) = self.size;
-        assert!(x < width, "x is out of bounds");
-        assert!(y < height, "y is out of bounds");
-        self.data[x][y] = field;
+
+        let mut result = true;
+
+        if x < width {
+            result = false;
+            println!("x is out of bounds");
+        }
+
+        if y < height {
+            result = false;
+            println!("y is out of bounds");
+        }
+
+        result
     }
 }
 
