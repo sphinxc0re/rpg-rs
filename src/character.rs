@@ -21,7 +21,17 @@ pub struct Character {
 }
 
 impl Character {
-    /// Creates a new instance of `Character`
+    /// Constructs a new `Character`.
+    ///
+    /// By default, the character has an attribute set given by `Character::default_attributes()`.
+    /// The characters default inventory size is `30`slots.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use rpg::character::Character;
+    /// let character = Character::new("Michael");
+    /// ```
     pub fn new(name: &str) -> Character {
         let attribute_map = Self::default_attributes();
         Character {
@@ -89,8 +99,11 @@ impl Character {
         *self.attributes.get(attribute).unwrap()
     }
 
-    /// A setter method for the head armor slot. **Panics** whether the given item is not
-    /// of type `ItemType::ArmorHead`
+    /// A setter method for the head armor slot.
+    ///
+    /// # Panics
+    ///
+    /// **Panics** whether the given item is not of type `ItemType::ArmorHead`
     pub fn set_armor_slot_head(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
             assert_eq!(inner_item.item_type, ItemType::ArmorHead);
@@ -99,8 +112,11 @@ impl Character {
         self.armor_slot_head = item;
     }
 
-    /// A setter method for the chest armor slot. **Panics** whether the given item is not
-    /// of type `ItemType::ArmorChest`
+    /// A setter method for the chest armor slot.
+    ///
+    /// # Panics
+    ///
+    /// **Panics** whether the given item is not of type `ItemType::ArmorChest`
     pub fn set_armor_slot_chest(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
             assert_eq!(inner_item.item_type, ItemType::ArmorChest);
@@ -109,7 +125,11 @@ impl Character {
         self.armor_slot_chest = item;
     }
 
-    /// A setter method for the legs armor slot. **Panics** whether the given item is not
+    /// A setter method for the legs armor slot.
+    ///
+    /// # Panics
+    ///
+    /// **Panics** whether the given item is not
     /// of type `ItemType::ArmorLegs`
     pub fn set_armor_slot_legs(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
@@ -119,7 +139,11 @@ impl Character {
         self.armor_slot_legs = item;
     }
 
-    /// A setter method for the feet armor slot. **Panics** whether the given item is not
+    /// A setter method for the feet armor slot.
+    ///
+    /// # Panics
+    ///
+    /// **Panics** whether the given item is not
     /// of type `ItemType::ArmorFeet`
     pub fn set_armor_slot_feet(&mut self, item: Option<Item>) {
         if let Some(ref inner_item) = item {
