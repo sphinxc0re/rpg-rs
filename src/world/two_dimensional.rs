@@ -1,16 +1,15 @@
-use rustc_serialize::json;
-use std::io::prelude::*;
-use std::fs::File;
+use entity::Entity;
+use super::World;
 
 /// A single field of the world
-#[derive(RustcEncodable, RustcDecodable, Clone)]
+#[derive(Clone)]
 pub struct Field {
     /// The type of the field
     pub field_type: FieldType,
     /// The height of the field. Used for collision detection
     pub height: i32,
     /// The id if the contained entity (optional)
-    pub contained_entity_id: Option<usize>,
+    pub entity: Option<Entity>,
 }
 
 impl Field {
@@ -19,13 +18,13 @@ impl Field {
         Field {
             field_type: field_type,
             height: 0,
-            contained_entity_id: None,
+            entity: None,
         }
     }
 
     /// A builder method for adding an entity to a field
-    pub fn contained_entity_id(mut self, entity_id: usize) -> Field {
-        self.contained_entity_id = Some(entity_id);
+    pub fn entity(mut self, entity: Entity) -> Field {
+        self.entity = Some(entity);
         self
     }
 
@@ -37,7 +36,7 @@ impl Field {
 }
 
 /// The field type. Used to determine the optical properties of the ground
-#[derive(RustcEncodable, RustcDecodable, Clone)]
+#[derive(Clone)]
 pub enum FieldType {
     /// A field consists of dirt
     Dirt,
@@ -65,159 +64,138 @@ pub enum FieldType {
     WoodenFence,
 }
 
-/// A larger section of a campagne containing a starting point and end point. The starting point
+/// A larger section of a campaign containing a starting point and end point. The starting point
 /// is where the character *spawns* and the end point is the point he has to reach for the next
-/// level to begin.
-#[derive(RustcEncodable, RustcDecodable)]
-pub struct Level {
-    /// The name or title of the level
+/// world to begin.
+pub struct World2d {
+    /// The name or title of the world
     pub name: String,
     /// The entry point of the character
     pub starting_point: (usize, usize),
-    /// The point where the level is finished
+    /// The point where the world is finished
     pub end_point: (usize, usize),
-    /// The actual size of the level
+    /// The current position of the player
+    current_position: (usize, usize),
+    /// The actual size of the world
     size: (usize, usize),
-    /// The actual fields, the level consists of
+    /// The actual fields, the world consists of
     data: Vec<Vec<Field>>,
 }
 
-impl Level {
-    /// Creates a new instance of `Level`
-    pub fn new(name: &str, size: (usize, usize)) -> Level {
+impl World2d {
+    /// Creates a new instance of `World2d`
+    pub fn new(name: &str, size: (usize, usize)) -> World2d {
         let (width, height) = size;
-        Level {
+        World2d {
             name: name.to_owned(),
             starting_point: (0, 0),
             end_point: (0, 0),
+            current_position: (0, 0),
             size: (width, height),
             data: vec![vec![Field::new(FieldType::Grass); height]; width],
         }
     }
 
-    /// A builder method for setting the starting point of the level
-    pub fn starting_point(mut self, starting_point: (usize, usize)) -> Level {
+    /// A builder method for setting the starting point of the world
+    pub fn starting_point(mut self, starting_point: (usize, usize)) -> World2d {
+        assert!(self.is_valid_coord(starting_point));
         self.starting_point = starting_point;
+        self.current_position = starting_point;
         self
     }
 
-    /// A builder method for setting the end point of the level
-    pub fn end_point(mut self, end_point: (usize, usize)) -> Level {
+    /// A builder method for setting the end point of the world
+    pub fn end_point(mut self, end_point: (usize, usize)) -> World2d {
+        assert!(self.is_valid_coord(end_point));
         self.end_point = end_point;
         self
     }
 
     /// Sets the given field at the given position
     pub fn set_field(&mut self, field: Field, position: (usize, usize)) {
-        let (x, y) = position;
+        assert!(self.is_valid_coord(position));
+        self.data[position.0][position.1] = field;
+    }
+
+    fn is_valid_coord(&mut self, coords: (usize, usize)) -> bool {
+        let (x, y) = coords;
         let (width, height) = self.size;
-        assert!(x < width, "x is out of bounds");
-        assert!(y < height, "y is out of bounds");
-        self.data[x][y] = field;
+
+        let mut result = true;
+
+        if x > width {
+            result = false;
+            println!("x is out of bounds");
+        }
+
+        if y > height {
+            result = false;
+            println!("y is out of bounds");
+        }
+
+        result
     }
 }
 
-/// A collection of levels. Usually used to create larger adventures
-#[derive(RustcEncodable, RustcDecodable)]
-pub struct Campagne {
-    /// The title of the campagne
-    pub title: String,
-    levels: Vec<Level>,
-}
+impl World for World2d {
+    type Position = (usize, usize);
 
-impl Campagne {
-    /// Creates a new instance of `Campagne`
-    pub fn new(title: &str) -> Campagne {
-        Campagne {
-            title: title.to_owned(),
-            levels: Vec::new(),
-        }
+    type Movement = (i64, i64);
+
+    fn get_position(&self) -> Self::Position {
+        self.current_position
     }
 
-    /// Adds a level to the campagne
-    pub fn add_level(&mut self, level: Level) {
-        self.levels.push(level);
+    fn is_finished(&self) -> bool {
+        self.current_position == self.end_point
     }
 
-    /// Saves the campagne to the specified file
-    pub fn save_to_file(&self, file_name: &str) {
-        let mut f = match File::create(file_name) {
-            Err(_) => return,
-            Ok(file) => file,
-        };
+    fn move_to(&mut self, movement: Self::Movement) {
+        let (mut pos_x, mut pos_y) = self.current_position;
+        let (mov_x, mov_y) = movement;
 
-        let campagne = match json::encode(self) {
-            Err(_) => return,
-            Ok(campagne) => campagne,
-        };
+        pos_x = ((pos_x as i64) + mov_x) as usize;
+        pos_y = ((pos_y as i64) + mov_y) as usize;
 
-        match f.write_all(campagne.as_bytes()) {
-            Err(_) => {}
-            Ok(_) => {}
-        };
-    }
-
-    /// Loads the campagen from the specified file
-    pub fn load_from_file(file_name: &str) -> Result<Campagne, &str> {
-        let mut f = match File::open(file_name) {
-            Err(_) => return Err(file_name),
-            Ok(file) => file,
-        };
-
-        let mut s = String::new();
-        match f.read_to_string(&mut s) {
-            Err(_) => return Err(file_name),
-            Ok(_) => {}
-        };
-
-        match json::decode(s.as_str()) {
-            Err(_) => return Err(file_name),
-            Ok(campagne) => Ok(campagne),
-        }
+        self.current_position = (pos_x, pos_y);
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use world::campaign::Campaign;
+    use entity::Entity;
 
     #[test]
-    fn save_and_load() {
-        let camp = Campagne::new("Adventure Time!");
-        camp.save_to_file("test.json");
+    fn build_campaign() {
+        let mut camp = Campaign::new("Adventure Time!");
 
-        let new_camp = Campagne::load_from_file("test.json").ok().unwrap();
-
-        assert_eq!(camp.title, new_camp.title);
-    }
-
-    #[test]
-    fn build_campagne() {
-        let mut camp = Campagne::new("Adventure Time!");
-
-        let mut level = Level::new("Hunger Game", (10, 10));
+        let mut world = World2d::new("Hunger Game", (10, 10));
 
         let field = Field::new(FieldType::Stone);
 
-        level.set_field(field, (0, 0));
+        world.set_field(field, (0, 0));
 
-        camp.add_level(level);
+        camp.add_world(world);
     }
 
     #[test]
-    fn new_level() {
-        let mut level = Level::new("Hunger Game", (10, 10));
+    fn new_world() {
+        let mut world = World2d::new("Hunger Game", (10, 10));
 
-        level = level.starting_point((1, 2)).end_point((3, 4));
+        world = world.starting_point((1, 2)).end_point((3, 4));
 
-        assert_eq!(level.size.0, 10);
-        assert_eq!(level.size.1, 10);
+        assert_eq!(world.size.0, 10);
+        assert_eq!(world.size.1, 10);
     }
 
     #[test]
     fn new_field() {
         let mut field = Field::new(FieldType::WoodenFence);
 
-        field = field.contained_entity_id(23).height(2);
+        let entity = Entity::new("Michael");
+
+        field = field.entity(entity).height(2);
     }
 }

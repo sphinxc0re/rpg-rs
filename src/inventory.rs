@@ -1,4 +1,5 @@
 use item::Item;
+use types::Gold;
 
 /// A single slot of the inventory
 #[derive(Debug)]
@@ -11,6 +12,7 @@ pub struct InventorySlot {
 #[derive(Debug)]
 pub struct Inventory {
     contents: Vec<InventorySlot>,
+    gold: Gold,
     max_size: usize,
 }
 
@@ -20,6 +22,7 @@ impl Inventory {
         Inventory {
             contents: Vec::new(),
             max_size: max_size,
+            gold: 0,
         }
     }
 

@@ -1,7 +1,8 @@
 use event::Event;
-use behaviour::Behaviour;
+use super::Behaviour;
 
 /// A default reponse when a character is talking to an entity
+#[derive(Clone)]
 pub struct DefaultResponse {
     response: String,
 }
@@ -14,10 +15,8 @@ impl DefaultResponse {
 }
 
 impl Behaviour for DefaultResponse {
-    fn handle_event(&self, event: Event) -> Event {
-        match event {
-            _ => Event::Tell(self.response.clone()),
-        }
+    fn handle_event(&self, _: Event) -> Event {
+        Event::Tell(self.response.clone())
     }
 }
 
@@ -33,7 +32,7 @@ mod tests {
 
         let mut entity = Entity::new("TestEntity");
 
-        entity.append_behaviour(default_response);
+        entity.append_behaviour(default_response.clone());
 
         assert_eq!(entity.send_event(Event::Nothing),
                    Event::Tell(String::from("Responsy!")));

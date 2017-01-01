@@ -2,6 +2,7 @@ use behaviour::Behaviour;
 use event::Event;
 
 /// Any non-character element
+#[derive(Clone)]
 pub struct Entity {
     name: String,
     behaviour: Vec<Box<Behaviour>>,
@@ -48,19 +49,43 @@ impl Behaviour for Entity {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use behaviour::Custom;
+    use behaviour::DefaultResponse;
     use event::Event;
 
     #[test]
     fn append_behaviour() {
-        let custom = Custom::new(|event| Event::Nothing);
+        let default_response = DefaultResponse::new("Response!");
 
         let mut entity = Entity::new("TestSubject");
 
-        entity.append_behaviour(custom);
+        entity.append_behaviour(default_response);
 
         let res = entity.send_event(Event::Nothing);
 
-        assert_eq!(res, Event::Nothing);
+        assert_eq!(res, Event::Tell("Response!".to_owned()));
+    }
+
+    #[test]
+    fn clone_entity() {
+        let entity = Entity::new("TestSubject");
+
+        let entity_clone = entity.clone();
+
+        assert_eq!(entity.name, entity_clone.name);
+    }
+
+    #[test]
+    fn chained_behaviour() {
+        let default_response_one = DefaultResponse::new("Response 1!");
+        let default_response_two = DefaultResponse::new("Response 2!");
+
+        let mut entity = Entity::new("TestSubject");
+
+        entity.append_behaviour(default_response_one);
+        entity.append_behaviour(default_response_two);
+
+        let res = entity.send_event(Event::Nothing);
+
+        assert_eq!(res, Event::Tell("Response 2!".to_owned()));
     }
 }

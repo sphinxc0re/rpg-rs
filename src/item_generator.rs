@@ -16,7 +16,21 @@ pub struct ItemGenerator {
 }
 
 impl ItemGenerator {
-    /// Creates a new instance of `ItemGenerator`
+    /// Constructs a new `ItemGenerator`.
+    ///
+    /// # Examples
+    ///
+    /// During contruction, empty fields will be filled with random values. The following example
+    /// constructs a random legendary sword.
+    ///
+    /// ```
+    /// # use rpg::item_generator::ItemGenerator;
+    /// # use rpg::item::{ItemType, ItemRarity};
+    /// let item = ItemGenerator::new()
+    ///     .item_type(ItemType::WeaponSword)
+    ///     .rarity(ItemRarity::Legendary)
+    ///     .gen();
+    /// ```
     pub fn new() -> ItemGenerator {
         ItemGenerator {
             data_name: None,
