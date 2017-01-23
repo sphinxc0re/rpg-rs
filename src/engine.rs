@@ -73,8 +73,8 @@ impl Engine {
             context = update(context);
 
             if context.invalid {
-                context = draw(context);
                 context.invalid = false;
+                context = draw(context);
             }
         }
     }
@@ -101,17 +101,15 @@ mod tests {
         engine.update(|context| {
             // Implement your update mechanics
 
-            context.invalid = true;
-
             // Return the altered/non-altered context
-            context
+            EngineContext { invalid: true, ..context }
         });
 
         engine.draw(|context| {
             // Implement your output
 
             // Return the altered/non-altered context
-            context
+            EngineContext { running: false, ..context }
         });
 
         // Start the engine => run the game
