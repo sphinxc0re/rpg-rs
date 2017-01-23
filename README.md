@@ -9,30 +9,30 @@ extern crate rpg;
 use rpg::{Engine, EngineContext};
 
 fn main() {
-    let engine = Engine::new();
+    let mut engine = Engine::new();
 
     engine.setup(|context| {
-      // Setup your game
-      // ...
-      // ..
-      // .
+        // Setup your game
+        // ...
+        // ..
+        // .
 
-      // Return the altered/non-altered context
-      context
+        // Return the altered/non-altered context
+        context
     });
 
     engine.update(|context| {
-      // Implement your update mechanics
+        // Implement your update mechanics
 
-      // Return the altered/non-altered context
-      context
+        // Return the altered/non-altered context
+        EngineContext { invalid: true, ..context }
     });
 
     engine.draw(|context| {
-      // Implement your output
+        // Implement your output
 
-      // Return the altered/non-altered context
-      context
+        // Return the altered/non-altered context
+        EngineContext { running: false, ..context }
     });
 
     // Start the engine => run the game
