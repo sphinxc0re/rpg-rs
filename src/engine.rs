@@ -1,44 +1,65 @@
 use world::World;
-use world::campaign::Campaign;
 
-/// The engine to run the game
-pub struct Engine<W: World> {
-    campaigns: Vec<Campaign<W>>,
-    campaign_counter: usize,
+struct EngineContext {
+    pub maps: Vec<u32>,
+    pub running: bool,
+    pub invalid: bool,
 }
 
-impl<W: World> Engine<W> {
-    /// Creates a new instance of `Engine`
-    pub fn new() -> Engine<W> {
-        Engine {
-            campaigns: Vec::new(),
-            campaign_counter: 0,
+impl EngineContext {
+    pub fn new() -> EngineContext {
+        EngineContext {
+            maps: Vec::new(),
+            running: false,
+            invalid: false,
         }
     }
-
-    /// start the engine and run the game with th current configuration
-    pub fn run(&mut self) {
-        unimplemented!()
-    }
-
-    /// Returns the currently selected campaign
-    pub fn current_campaign(&self) -> &Campaign<W> {
-        &self.campaigns[self.campaign_counter]
-    }
-
-    /// Add a campaign to the engine
-    pub fn add_campaign(&mut self, campaign: Campaign<W>) {
-        self.campaigns.push(campaign);
-    }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use world::two_dimensional::World2d;
+/// The engine to run the game
+pub struct Engine {
+    setup: Box<Fn(EngineContext) -> EngineContext>,
+    update: Box<Fn(EngineContext) -> EngineContext>,
+    draw: Box<Fn(EngineContext) -> EngineContext>,
+}
 
-    #[test]
-    fn new_engine() {
-        let engine: Engine<World2d> = Engine::new();
+impl Engine {
+    pub fn setup<T: 'static>(&mut self, setup: T)
+        where T: Fn(EngineContext) -> EngineContext
+    {
+        self.setup = Box::new(setup);
+    }
+
+    pub fn update<T: 'static>(&mut self, update: T)
+        where T: Fn(EngineContext) -> EngineContext
+    {
+        self.update = Box::new(update);
+    }
+
+    pub fn draw<T: 'static>(&mut self, draw: T)
+        where T: Fn(EngineContext) -> EngineContext
+    {
+        self.draw = Box::new(draw);
+    }
+
+    pub fn start(&self) {
+        let setup = self.setup;
+        let update = self.update;
+        let draw = self.draw;
+
+        let mut context = EngineContext::new();
+        context = setup(context);
+
+        loop {
+            if !context.running {
+                break;
+            }
+
+            context = update(context);
+
+            if context.invalid {
+                context = draw(context);
+            }
+        }
     }
 }
