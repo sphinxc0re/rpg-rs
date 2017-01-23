@@ -2,12 +2,40 @@
 Welcome traveler! Don't be frightened by that *cryptc* name above. This project aims to implement the **very basic** data and mechanics of an RPG. Of course, there are a lot of ways to interpret and implement an RPG and I guess there will always be someone who disagrees with my implementation. So feel free to contribute and share the code and if this doesn't feel right to you, create a fork and create your own better variant.
 
 ## Roadmap
-- [ ] own, better name generation
-- [ ] implement game-worlds (2d grid based)
-- [ ] implement game-world loading from file
-- [ ] implement world/campaign/world scripting through a derived ASM dialect
-- [ ] add `requirement` to `Item`
-- [ ] make item name and attribute generation more fine-grained, related to the item's type
-- [ ] create ECS for NPCs
-- [ ] create dialog system
-- [ ] create event system
+The next goal for me is to let you do this:
+```rust
+extern crate rpg;
+
+use rpg::{Engine, EngineContext};
+
+fn main() {
+    let engine = Engine::new();
+
+    engine.setup(|context| {
+      // Setup your game
+      // ...
+      // ..
+      // .
+
+      // Return the altered/non-altered context
+      context
+    });
+
+    engine.update(|context| {
+      // Implement your update mechanics
+
+      // Return the altered/non-altered context
+      context
+    });
+
+    engine.draw(|context| {
+      // Implement your output
+
+      // Return the altered/non-altered context
+      context
+    });
+
+    // Start the engine => run the game
+    engine.start();
+}
+```
