@@ -62,6 +62,7 @@ impl Engine {
         let draw = self.draw.as_ref().unwrap();
 
         let mut context = EngineContext::new();
+        context.running = true;
         context = setup(context);
 
         loop {
@@ -73,6 +74,7 @@ impl Engine {
 
             if context.invalid {
                 context = draw(context);
+                context.invalid = false;
             }
         }
     }
@@ -98,6 +100,8 @@ mod tests {
 
         engine.update(|context| {
             // Implement your update mechanics
+
+            context.invalid = true;
 
             // Return the altered/non-altered context
             context
