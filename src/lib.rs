@@ -1,6 +1,6 @@
-#![forbid(missing_docs)]
-#![forbid(unsafe_code)]
-#![forbid(unused_import_braces)]
+#![deny(missing_docs)]
+#![deny(unsafe_code)]
+#![deny(unused_import_braces)]
 
 //! # rpg-rs
 //! A **very basic** RPG engine written in Rust
