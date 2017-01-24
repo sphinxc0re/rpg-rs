@@ -35,5 +35,5 @@ pub mod types;
 pub mod world;
 /// The actual engine to run the game and handle the IO
 pub mod engine;
-
-pub use engine::Engine;
+/// Asset objects to load assets and manipulate them
+pub mod assets;
