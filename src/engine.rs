@@ -83,6 +83,8 @@ impl Engine {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use character::Character;
+
 
     #[test]
     fn workflow() {
@@ -90,9 +92,7 @@ mod tests {
 
         engine.setup(|context| {
             // Setup your game
-            // ...
-            // ..
-            // .
+            let character = Character::new("Thomas");
 
             // Return the altered/non-altered context
             context

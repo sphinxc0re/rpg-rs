@@ -125,24 +125,19 @@ impl ItemType {
 
         stackable_types.contains(self)
     }
-}
 
-impl Rand for ItemType {
-    fn rand<R: Rng>(rng: &mut R) -> ItemType {
-        let base = rng.gen_range(0, 1000);
-
-        match base {
+    /// A helper method to get an ItemType
+    pub fn by_num(item_class_num: u32, item_type_num: u32) -> ItemType {
+        match item_class_num {
             0...250 => {
-                let base = rng.gen_range(0, 1000);
-                match base {
+                match item_type_num {
                     0...500 => ItemType::ConsumableFood,
                     501...1000 => ItemType::ConsumablePotion,
                     _ => ItemType::Prop,
                 }
             }
             251...500 => {
-                let base = rng.gen_range(0, 1000);
-                match base {
+                match item_type_num {
                     0...250 => ItemType::ArmorHead,
                     251...500 => ItemType::ArmorChest,
                     501...750 => ItemType::ArmorLegs,
@@ -151,8 +146,7 @@ impl Rand for ItemType {
                 }
             }
             501...750 => {
-                let base = rng.gen_range(0, 1000);
-                match base {
+                match item_type_num {
                     0...333 => ItemType::WeaponHammer,
                     334...666 => ItemType::WeaponSword,
                     667...1000 => ItemType::WeaponWand,
@@ -160,8 +154,7 @@ impl Rand for ItemType {
                 }
             }
             751...1000 => {
-                let base = rng.gen_range(0, 1000);
-                match base {
+                match item_type_num {
                     0...500 => ItemType::Usable,
                     501...1000 => ItemType::Prop,
                     _ => ItemType::Prop,
@@ -169,6 +162,15 @@ impl Rand for ItemType {
             }
             _ => ItemType::Prop,
         }
+    }
+}
+
+impl Rand for ItemType {
+    fn rand<R: Rng>(rng: &mut R) -> ItemType {
+        let item_class_num = rng.gen_range(0, 1000);
+        let item_type_num = rng.gen_range(0, 1000);
+
+        ItemType::by_num(item_class_num, item_type_num)
     }
 }
 
@@ -187,11 +189,10 @@ pub enum ItemRarity {
     Legendary,
 }
 
-impl Rand for ItemRarity {
-    fn rand<R: Rng>(rng: &mut R) -> ItemRarity {
-        let base = rng.gen_range(0, 1000);
-
-        match base {
+impl ItemRarity {
+    /// A helper method to get an ItemRarity
+    pub fn by_num(item_rarity_num: u32) -> ItemRarity {
+        match item_rarity_num {
             0...750 => ItemRarity::Common,
             751...917 => ItemRarity::Uncommon,
             918...972 => ItemRarity::Rare,
@@ -199,6 +200,14 @@ impl Rand for ItemRarity {
             980...1000 => ItemRarity::Legendary,
             _ => ItemRarity::Common,
         }
+    }
+}
+
+impl Rand for ItemRarity {
+    fn rand<R: Rng>(rng: &mut R) -> ItemRarity {
+        let base = rng.gen_range(0, 1000);
+
+        ItemRarity::by_num(base)
     }
 }
 
@@ -224,5 +233,32 @@ mod tests {
 
         let head_piece = item_generator::ItemGenerator::new().stack_size(1).gen();
         assert!(!head_piece.can_be_stacked());
+    }
+
+    #[test]
+    fn item_rarity() {
+        assert_eq!(ItemRarity::by_num(0), ItemRarity::Common);
+        assert_eq!(ItemRarity::by_num(750), ItemRarity::Common);
+
+        assert_eq!(ItemRarity::by_num(751), ItemRarity::Uncommon);
+        assert_eq!(ItemRarity::by_num(917), ItemRarity::Uncommon);
+
+        assert_eq!(ItemRarity::by_num(918), ItemRarity::Rare);
+        assert_eq!(ItemRarity::by_num(972), ItemRarity::Rare);
+
+        assert_eq!(ItemRarity::by_num(973), ItemRarity::Epic);
+        assert_eq!(ItemRarity::by_num(979), ItemRarity::Epic);
+
+        assert_eq!(ItemRarity::by_num(980), ItemRarity::Legendary);
+        assert_eq!(ItemRarity::by_num(1000), ItemRarity::Legendary);
+    }
+
+    #[test]
+    fn item_type() {
+        for class_num in (0..1000) {
+            for type_num in (0..1000) {
+                ItemType::by_num(class_num, type_num);
+            }
+        }
     }
 }
