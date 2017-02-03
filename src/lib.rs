@@ -13,8 +13,11 @@
 
 extern crate names;
 extern crate rand;
-extern crate rustc_serialize;
+#[macro_use]
+extern crate error_chain;
 
+/// error_chain setup
+pub mod errors;
 /// The behaviour of entities
 pub mod behaviour;
 /// The structures used to bulid a character
